@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\AuthDocentiFilter;
 use App\Filters\AuthFilter;
 use App\Filters\AuthSegreteriaFilter;
 use CodeIgniter\Config\BaseConfig;
@@ -18,13 +19,14 @@ class Filters extends BaseConfig
      * make reading things nicer and simpler.
      */
     public array $aliases = [
-        'csrf'          => CSRF::class,
-        'toolbar'       => DebugToolbar::class,
-        'honeypot'      => Honeypot::class,
-        'invalidchars'  => InvalidChars::class,
+        'csrf' => CSRF::class,
+        'toolbar' => DebugToolbar::class,
+        'honeypot' => Honeypot::class,
+        'invalidchars' => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'auth' => AuthFilter::class,
         'authsegreteria' => AuthSegreteriaFilter::class,
+        'authdocenti' => AuthDocentiFilter::class,
     ];
 
     /**
@@ -36,7 +38,7 @@ class Filters extends BaseConfig
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
-           // 'auth' => ['except' => ['login']],
+            // 'auth' => ['except' => ['login']],
         ],
         'after' => [
             'toolbar',
@@ -69,5 +71,6 @@ class Filters extends BaseConfig
      */
     public array $filters = [
         'authsegreteria' => ['before' => ['segreteria', 'segreteria/*',]],
+        'authdocenti' => ['before' => ['docenti', 'docenti/*',]],
     ];
 }

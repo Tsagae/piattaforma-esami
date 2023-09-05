@@ -73,4 +73,21 @@ class SegretariData
         $segretario->password = $segretarioFromDb->password;
         self::updateSegretario($segretario, $error);
     }
+
+    public static function getSegretarioByIdUtente(int $id_utente, &$error): ?object
+    {
+        $conn = PostgresConnection::get();
+        try {
+            $res = $conn->selectProcedure("db_esami.get_segretario_by_id_utente", $id_utente);
+            if (count($res) === 0) {
+                $error = "Errore nella selezione del segretario";
+                return null;
+            }
+            return $res[0];
+        } catch (Exception $e) {
+            error_log($e);
+            $error = "Errore nella selezione del segretario";
+        }
+        return null;
+    }
 }

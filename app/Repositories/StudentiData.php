@@ -86,4 +86,22 @@ class StudentiData
         self::updateStudente($studente, $error);
     }
 
+    public static function getStudenteByIdUtente(int $id_utente, &$error): ?object
+    {
+        $conn = PostgresConnection::get();
+        try {
+            $res = $conn->selectProcedure("db_esami.get_studente_by_id_utente", $id_utente);
+            if (count($res) === 0) {
+                $error = "Errore nella selezione dello studente";
+                return null;
+            }
+            return $res[0];
+        } catch (Exception $e) {
+            error_log($e);
+            $error = "Errore nella selezione dello studente";
+        }
+        return null;
+    }
+
+
 }

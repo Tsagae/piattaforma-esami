@@ -55,7 +55,8 @@ class PostgresConnection
     {
         $conn = $this->connect();
         $dbRes = pg_query($conn, $sql);
-        if($dbRes === false) return false;
+        if ($dbRes === false)
+            return false;
         $resData = array();
         while ($dbData = pg_fetch_object($dbRes)) {
             $resData[] = $dbData;
@@ -80,13 +81,15 @@ class PostgresConnection
         $procArgs = rtrim($procArgs);
         $procArgs = rtrim($procArgs, ',');
         $procArgs .= ')';
-        //echo "procArgs: $procArgs\n";
-        //print_r($argArr);
-        //echo "query: $query$procArgs; \n";
+        /*
+        error_log("query: $query$procArgs; \n");
+        $argsString = var_export($argArr, true);
+        error_log("argArr: $argsString\n");
+        */
         $conn = $this->connect();
-        //array('email@email.com', 'pass1')
         $dbRes = pg_query_params($conn, "$query$procArgs;", $argArr);
-        if($dbRes === false) return false;
+        if ($dbRes === false)
+            return false;
         $resData = array();
         while ($dbData = pg_fetch_object($dbRes)) {
             $resData[] = $dbData;

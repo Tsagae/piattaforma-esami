@@ -3,6 +3,7 @@
 namespace Config;
 
 // Create a new instance of our RouteCollection class.
+use App\Controllers\Docenti\GestioneEsami;
 use App\Controllers\LoginController;
 use App\Controllers\Pages;
 use App\Controllers\SecondController;
@@ -69,9 +70,18 @@ $routes->match(['get', 'post'], '/segreteria/cdl/delete', [Cdl::class, 'delete']
 $routes->match(['get', 'post'], '/segreteria/cdl/edit', [Cdl::class, 'edit']);
 //Segreteria/insegnamenti
 $routes->match(['get', 'post'], '/segreteria/insegnamenti', [Insegnamenti::class, 'listInsegnamenti']);
+$routes->match(['get', 'post'], '/segreteria/insegnamenti/add', [Insegnamenti::class, 'add']);
+$routes->match(['get', 'post'], '/segreteria/insegnamenti/edit', [Insegnamenti::class, 'edit']);
+$routes->match(['get', 'post'], '/segreteria/insegnamenti/delete', [Insegnamenti::class, 'delete']);
 
 
 
+
+//Docenti
+$routes->get('/docenti', [\App\Controllers\Docenti\Index::class, 'listInsegnamenti']);
+//Docenti/Esami
+$routes->match(['get', 'post'], '/docenti/esami/add', [GestioneEsami::class, 'add']);
+$routes->match(['get', 'post'], '/docenti/esami/delete', [GestioneEsami::class, 'delete']);
 
 
 //Testing

@@ -75,4 +75,21 @@ class DocentiData
         $docente->password = $docenteFromDb->password;
         self::updateDocente($docente, $error);
     }
+
+    public static function getDocenteByIdUtente(int $id_utente, &$error): ?object
+    {
+        $conn = PostgresConnection::get();
+        try {
+            $res = $conn->selectProcedure("db_esami.get_docente_by_id_utente", $id_utente);
+            if (count($res) === 0) {
+                $error = "Errore nella selezione del docente";
+                return null;
+            }
+            return $res[0];
+        } catch (Exception $e) {
+            error_log($e);
+            $error = "Errore nella selezione del docente";
+        }
+        return null;
+    }
 }
