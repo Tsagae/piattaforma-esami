@@ -14,11 +14,16 @@ class InsegnamentiData
         return $conn->executeQuery("SELECT * FROM db_esami.insegnamenti_info");
     }
 
-    public static function getInsegnamento(int $id_insegnamento): ?object
+    public static function getInsegnamento(int $id_insegnamento, &$error): ?object
     {
         $conn = PostgresConnection::get();
         error_log("id insegnamento: $id_insegnamento \n");
-        $insegnamenti = $conn->selectProcedure("db_esami.get_insegnamento", $id_insegnamento);
+        try {
+            $insegnamenti = $conn->selectProcedure("db_esami.get_insegnamento", $id_insegnamento);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare insegnamento";
+            error_log($e->getMessage());
+        }
         return count($insegnamenti) > 0 ? $insegnamenti[0] : null;
     }
 

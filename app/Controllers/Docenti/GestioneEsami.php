@@ -2,46 +2,72 @@
 
 namespace App\Controllers\Docenti;
 
-
 use App\Controllers\BaseController;
 use App\Repositories\EsamiData;
 use App\Repositories\InsegnamentiData;
 
 class GestioneEsami extends BaseController
 {
-    public function index()
+    private function autenticaDocente(int $id_docente): ?string
+    {
+        if (session()->get('docente')->id_docente != $id_docente) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . '<h1>Accesso negato</h1>'
+                . view('templates/footer');
+        }
+        return null;
+    }
+
+    public function index(): string
     {
         return view('templates/header', ['title' => 'Docenti'])
             . view('docenti/index')
             . view('templates/footer');
     }
 
-    public function add()
+    public function addGet(): string
+    {
+        helper('form');
+
+        $get = $this->request->getGet(['id']);
+
+        $error = "";
+        $insegnamento = InsegnamentiData::getInsegnamento($get['id'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        $docente = session()->docente;
+        if ($insegnamento === null) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . '<h1>Insegnamento non trovato</h1>'
+                . view('templates/footer');
+        }
+        if ($docente === null) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . '<h1>Docente non valido</h1>'
+                . view('templates/footer');
+        }
+        $resAuth = $this->autenticaDocente($insegnamento->id_docente);
+        if ($resAuth != null)
+            return $resAuth;
+
+        $data['insegnamento'] = $insegnamento;
+        $data['docente'] = $docente;
+        error_log("insegnamento: " . var_export($insegnamento, true));
+        return view('templates/header', ['title' => 'Docenti'])
+            . view('docenti/esami/add', $data)
+            . view('templates/footer');
+    }
+
+    public function addPost(): string
     {
         helper('form');
 
         $data = [];
-        if (!$this->request->is('post')) {
-            $get = $this->request->getGet(['id']);
-            $insegnamento = InsegnamentiData::getInsegnamento($get['id']);
-            $docente = session()->docente;
-            if ($insegnamento === null) {
-                return view('templates/header', ['title' => 'Docenti'])
-                    . '<h1>Insegnamento non trovato</h1>'
-                    . view('templates/footer');
-            }
-            if ($docente === null) {
-                return view('templates/header', ['title' => 'Docenti'])
-                    . '<h1>Docente non valido</h1>'
-                    . view('templates/footer');
-            }
-            $data['insegnamento'] = $insegnamento;
-            $data['docente'] = $docente;
-            return view('templates/header', ['title' => 'Docenti'])
-                . view('docenti/esami/add', $data)
-                . view('templates/footer');
-        }
         $post = $this->request->getPost(['id_insegnamento', 'id_docente', 'data']);
+
         if (
             !$this->validateData($post, [
                 'id_insegnamento' => 'required',
@@ -57,12 +83,24 @@ class GestioneEsami extends BaseController
         }
 
         $error = "";
+        $insegnamento = InsegnamentiData::getInsegnamento($post['id_insegnamento'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+
+        $resAuth = $this->autenticaDocente($insegnamento->id_docente);
+        if ($resAuth != null)
+            return $resAuth;
+
+        $error = "";
         EsamiData::addEsame((object) $post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
             return view('templates/header', ['title' => 'Docenti'])
-                . view('docenti/esami/add', $data)
+                . "<h1>$error</h1>"
                 . view('templates/footer');
         }
         return view('templates/header', ['title' => 'Docenti'])
@@ -70,32 +108,50 @@ class GestioneEsami extends BaseController
             . view('templates/footer');
     }
 
-    public function delete()
+    public function deleteGet(): string
     {
+        helper('form');
+
         $error = "";
-        if (!$this->request->is('post')) {
-            $esame = EsamiData::getEsame($this->request->getGet('id'), $error);
-            if (!empty($error)) {
-                return view('templates/header', ['title' => 'Docenti'])
-                    . esc($error)
-                    . view('templates/footer');
-            }
+        $esame = EsamiData::getEsame($this->request->getGet('id'), $error);
+        if (!empty($error)) {
             return view('templates/header', ['title' => 'Docenti'])
-                . view('templates/confirmation', [
-                    'submitValue' => "$esame->id_esame",
-                    'text' => "Cacellazione esame $esame->id_esame $esame->data $esame->nome_insegnamento $esame->id_cdl",
-                    'confirmText' => 'Rimuovi',
-                    'cancelRedirect' => '/docenti',
-                    'cancelText' => 'Annulla'
-                ])
+                . esc($error)
                 . view('templates/footer');
         }
+        if (session()->get('docente')->id_docente != $esame->id_docente) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . '<h1>Accesso negato</h1>'
+                . view('templates/footer');
+        }
+        return view('templates/header', ['title' => 'Docenti'])
+            . view('templates/confirmation', [
+                'submitValue' => "$esame->id_esame",
+                'text' => "Cacellazione esame $esame->id_esame $esame->data $esame->nome_insegnamento $esame->id_cdl",
+                'confirmText' => 'Rimuovi',
+                'cancelRedirect' => '/docenti',
+                'cancelText' => 'Annulla'
+            ])
+            . view('templates/footer');
+    }
+
+    public function deletePost(): string
+    {
+        helper('form');
 
         $post = $this->request->getPost(['submitValue']);
-
-        $postString = var_export($post, true);
-        error_log("post: $postString");
         $error = "";
+        $esame = EsamiData::getEsame($post['submitValue'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        if (session()->get('docente')->id_docente != $esame->id_docente) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . '<h1>Accesso negato</h1>'
+                . view('templates/footer');
+        }
         EsamiData::deleteEsame($post['submitValue'], $error);
         if (!empty($error)) {
             return view('templates/header', ['title' => 'Docenti'])
@@ -104,6 +160,81 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h3>Insegnamento rimosso correttamente</h3>'
+            . view('templates/footer');
+    }
+
+    public function editGet(): string
+    {
+        helper('form');
+
+        $error = "";
+        $esame = EsamiData::getEsame($this->request->getGet('id'), $error);
+
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        $insegnamento = InsegnamentiData::getInsegnamento($esame->id_insegnamento);
+        $data['$insegnamento'] = $insegnamento;
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        $resAuth = $this->autenticaDocente($insegnamento->id_docente);
+        if ($resAuth != null)
+            return $resAuth;
+
+        return view('templates/header', ['title' => 'Docenti'])
+            . view('docenti/esami/edit', ['esame' => $esame])
+            . view('templates/footer');
+    }
+
+    public function editPost(): string
+    {
+
+        helper('form');
+
+        $data = [];
+        $error = "";
+        $esame = EsamiData::getEsame($this->request->getGet('id'), $error);
+
+
+        $post = $this->request->getPost(['id_esame', 'data']);
+        if (
+            !$this->validateData($post, [
+                'id_esame' => 'required',
+                'data' => 'required',
+            ])
+        ) {
+            // The validation fails, so returns the form.
+            $esame->data = $post['data'];
+            return view('templates/header', ['title' => 'Docenti'])
+                . view('docenti/esami/edit', ['esame' => $esame])
+                . view('templates/footer');
+        }
+
+        $error = "";
+        $esame = EsamiData::getEsame($post['id_esame'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        $resAuth = $this->autenticaDocente($esame->id_docente);
+        if ($resAuth != null)
+            return $resAuth;
+        EsamiData::updateEsame((object) $post, $error);
+        if (!empty($error)) {
+            error_log("error");
+            $data['queryError'] = $error;
+            return view('templates/header', ['title' => 'Docenti'])
+                . view('docenti/esami/edit', ['esame' => (object) $post])
+                . view('templates/footer');
+        }
+        return view('templates/header', ['title' => 'Docenti'])
+            . '<h3>Esame modificato correttamente</h3>'
             . view('templates/footer');
     }
 }

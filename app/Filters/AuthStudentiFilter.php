@@ -6,7 +6,7 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class AuthSegreteriaFilter implements FilterInterface
+class AuthStudentiFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -14,7 +14,7 @@ class AuthSegreteriaFilter implements FilterInterface
         if ($session->get("user") === null) {
             return redirect()->to(site_url('login'));
         }
-        if ($session->get("user")->ruolo !== "segreteria") {
+        if ($session->get("user")->ruolo !== "studente") {
             return redirect()->to(site_url('/unauthorized'));
         }
     }

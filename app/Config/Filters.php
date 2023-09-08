@@ -5,6 +5,7 @@ namespace Config;
 use App\Filters\AuthDocentiFilter;
 use App\Filters\AuthFilter;
 use App\Filters\AuthSegreteriaFilter;
+use App\Filters\AuthStudentiFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -27,6 +28,7 @@ class Filters extends BaseConfig
         'auth' => AuthFilter::class,
         'authsegreteria' => AuthSegreteriaFilter::class,
         'authdocenti' => AuthDocentiFilter::class,
+        'authstudenti' => AuthStudentiFilter::class,
     ];
 
     /**
@@ -72,5 +74,6 @@ class Filters extends BaseConfig
     public array $filters = [
         'authsegreteria' => ['before' => ['segreteria', 'segreteria/*',]],
         'authdocenti' => ['before' => ['docenti', 'docenti/*',]],
+        'authstudenti' => ['before' => ['studenti', 'studenti/*',]],
     ];
 }

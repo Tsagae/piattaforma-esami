@@ -15,7 +15,6 @@ class Insegnamenti extends BaseController
     {
         helper('form');
 
-
         $data['noRecordsText'] = "Nessun insegnamento";
         $data['allCdl'] = CdlData::getAllCdl();
         if (!$this->request->is('post')) {
@@ -126,7 +125,7 @@ class Insegnamenti extends BaseController
                 . view('templates/footer');
         }
 
-        $post = $this->request->getPost(['id_insegnamento', 'semestre', 'nome', 'id_docente', 'id_cdl']);
+        $post = $this->request->getPost(['id_insegnamento', 'semestre', 'nome', 'id_docente', 'id_cdl', 'propedeuticita[]']);
         error_log("post" . var_export($post, true));
         if (
             !$this->validateData($post, [
@@ -143,6 +142,7 @@ class Insegnamenti extends BaseController
                 . view('segreteria/insegnamenti/edit', $data)
                 . view('templates/footer');
         }
+        error_log("prop: " . var_export($post['propedeuticita[]'], true));
 
         $error = "";
         InsegnamentiData::updateInsegnamento((object) $post, $error);

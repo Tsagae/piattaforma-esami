@@ -68,7 +68,22 @@ if (isset($insegnamento)) {
                     <?php endforeach ?>
                 </select>
             </div>
-
+        </div>
+        <hr>
+        <div class="row g-3">
+            <label for="propedeuticita" class="form-label">Propedeuticità</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="val1" id="flexCheckDefault" name="propedeuticita[]">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Default checkbox
+                </label>
+                </div>
+                <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="val2" id="flexCheckChecked" name="propedeuticita[]">
+                <label class="form-check-label" for="flexCheckChecked">
+                    Checked checkbox
+                </label>
+            </div>
         </div>
         <p>
             <?= validation_list_errors() ?>

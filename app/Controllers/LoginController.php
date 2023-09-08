@@ -62,9 +62,20 @@ class LoginController extends BaseController
             $session = session();
             $session->set("user", $user);
             $error = "";
-            error_log("userInfo: " . var_export($this::addUsersInfo($user, $error), true));
+            $usersInfo = $this::addUsersInfo($user, $error);
+            error_log("userInfo: " . var_export($usersInfo, true));
             error_log("error: " . $error);
-            $session->set("$user->ruolo", $this::addUsersInfo($user, $error));
+            $session->set("$user->ruolo", $usersInfo);
+            switch ($user->ruolo) {
+                case "studente":
+                    return redirect()->to(site_url('/studenti'));
+                case "docente":
+                    return redirect()->to(site_url('/docenti'));
+                case "segreteria":
+                    return redirect()->to(site_url('/segreteria'));
+                default:
+                    break;
+            }
         }
         /*
             return view('templates/header', ['title' => 'Login'])

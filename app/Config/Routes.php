@@ -75,13 +75,23 @@ $routes->match(['get', 'post'], '/segreteria/insegnamenti/edit', [Insegnamenti::
 $routes->match(['get', 'post'], '/segreteria/insegnamenti/delete', [Insegnamenti::class, 'delete']);
 
 
-
-
 //Docenti
 $routes->get('/docenti', [\App\Controllers\Docenti\Index::class, 'listInsegnamenti']);
 //Docenti/Esami
-$routes->match(['get', 'post'], '/docenti/esami/add', [GestioneEsami::class, 'add']);
-$routes->match(['get', 'post'], '/docenti/esami/delete', [GestioneEsami::class, 'delete']);
+$routes->get('/docenti/esami/add', [GestioneEsami::class, 'addGet']);
+$routes->post('/docenti/esami/add', [GestioneEsami::class, 'addPost']);
+$routes->get('/docenti/esami/delete', [GestioneEsami::class, 'deleteGet']);
+$routes->post('/docenti/esami/delete', [GestioneEsami::class, 'deletePost']);
+$routes->get('/docenti/esami/edit', [GestioneEsami::class, 'editGet']);
+$routes->post('/docenti/esami/edit', [GestioneEsami::class, 'editPost']);
+
+
+//Studenti
+$routes->get('/studenti', [\App\Controllers\Studenti\Index::class, 'index']);
+//Studenti/Esami
+$routes->get('/studenti/esami/prossimiesami', [\App\Controllers\Studenti\GestioneEsami::class, 'listNotIscrittoEsami']);
+$routes->get('/studenti/esami/iscrizioni', [\App\Controllers\Studenti\GestioneEsami::class, 'listIscrittoEsami']);
+$routes->match(['get', 'post'], '/studenti/esami/iscriviti', [\App\Controllers\Studenti\GestioneEsami::class, 'iscriviti']);
 
 
 //Testing
