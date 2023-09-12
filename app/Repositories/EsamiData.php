@@ -37,6 +37,32 @@ class EsamiData
         }
     }
 
+    public static function getEsamiFuturiByIdDocente(int $id_docente, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_esami_futuri_by_id_docente", $id_docente);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare esami";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+    public static function getEsamiPassatiByIdDocente(int $id_docente, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_esami_passati_by_id_docente", $id_docente);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare esami";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
     public static function getEsame($id_esame, string &$error): ?object
     {
         $conn = PostgresConnection::get();
@@ -157,9 +183,111 @@ class EsamiData
                 $id_esame,
             );
         } catch (Exception $e) {
-            $error = "Impossibile aggiornare esame";
+            $error = "Impossibile iscriversi all'esame";
             error_log($e->getMessage());
         }
     }
 
+    public static function getNextEsamiIscritto(int $matricola, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_next_esami_iscritto", $matricola);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare esami";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+    public static function deleteIscrizioneEsame(int $matricola, int $id_esame, string &$error): void
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            $conn->callProcedure(
+                "db_esami.delete_iscrizione_esame",
+                $matricola,
+                $id_esame,
+            );
+        } catch (Exception $e) {
+            $error = "Impossibile eliminare iscrizione esame";
+            error_log($e->getMessage());
+        }
+    }
+
+    public static function getAllEsamiIscritto(int $matricola, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_all_esami_iscritto", $matricola);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare esami";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+    public static function getIscrizioniByIdEsame(int $id_esame, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_iscrizioni_by_id_esame", $id_esame);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare iscritti";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+    public static function getIscrizioneEsame(int $matricola, int $id_esame, string &$error): ?object
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            $res = $conn->selectProcedure("db_esami.get_iscrizione_esame", $matricola, $id_esame);
+            if (count($res) === 0) {
+                return null;
+            }
+            return $res[0];
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare iscrizione";
+            error_log($e->getMessage());
+            return null;
+        }
+    }
+
+    public static function updateValutazione(object $valutazione, string &$error): void
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            $conn->callProcedure(
+                "db_esami.update_valutazione",
+                $valutazione->id_esame,
+                $valutazione->matricola,
+                $valutazione->voto,
+            );
+        } catch (Exception $e) {
+            $error = "Impossibile aggiornare valutazione";
+            error_log($e->getMessage());
+        }
+    }
+
+    public static function getCarrieraValida(int $matricola, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            $res = $conn->selectProcedure("db_esami.get_carriera_valida", $matricola);
+            return $res;
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare carriera";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
 }

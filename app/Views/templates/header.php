@@ -10,7 +10,7 @@ function navBar(?object $user): string
                 <a class="nav-link" href="/segreteria/utenti">Gestione Utenti</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/segreteria/cdl">Gestione Cdl</a>
+                <a class="nav-link" href="/segreteria/cdl">Gestione CDL</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/segreteria/insegnamenti">Gestione Insegnamenti</a>
@@ -20,14 +20,32 @@ function navBar(?object $user): string
         case "studente":
             $innerBar = <<<HTML
             <li class="nav-item">
-                <a class="nav-link" href="/studenti/esami">Iscrizione Esami</a>
+                <a class="nav-link" href="/studenti/esami/prossimiesami">Iscriviti a un Esame</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/studenti/esami/iscrizioni">Iscrizioni Confermate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/studenti/carriera">Visualizza Carriera</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/studenti/carrieravalida">Visualizza Carriera Valida</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/studenti/cdl">Visualizza CDL</a>
             </li>
         HTML;
             break;
         case "docente":
             $innerBar = <<<HTML
             <li class="nav-item">
-                <a class="nav-link" href="/docenti/esami">Gestisci Esami</a>
+                <a class="nav-link" href="/docenti/insegnamenti">Insegnamenti</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/docenti/prossimiesami">Prossimi Esami</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/docenti/esamipassati">Esami Passati</a>
             </li>
         HTML;
             break;

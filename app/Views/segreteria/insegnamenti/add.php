@@ -23,6 +23,16 @@
                     <option value="2">2</option>
                 </select>
             </div>
+
+            <div class="col-sm-6">
+                <label for="anno" class="form-label">Anno</label>
+                <input type="number" class="form-control" name="anno" placeholder="" value="<?= set_value('anno') ?>"
+                    required="">
+                <div class="invalid-feedback">
+                    Anno obbligatorio.
+                </div>
+            </div>
+
         </div>
         <div class="row g-3">
             <div class="row g-3 mb-3">

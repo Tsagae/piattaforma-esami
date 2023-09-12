@@ -45,7 +45,8 @@ class InsegnamentiData
                 $insegnamento->semestre,
                 $insegnamento->nome,
                 $insegnamento->id_docente,
-                $insegnamento->id_cdl
+                $insegnamento->id_cdl,
+                $insegnamento->anno
             );
         } catch (Exception $e) {
             $error = "Impossibile aggiungere insegnamento";
@@ -100,4 +101,19 @@ class InsegnamentiData
             return [];
         }
     }
+
+    public static function get_insegnamenti_by_cdl(string $id_cdl, &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_insegnamenti_by_cdl", $id_cdl);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare insegnamenti";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+
 }

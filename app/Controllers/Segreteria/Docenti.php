@@ -34,10 +34,13 @@ class Docenti extends BaseController
         error_log("post" . var_export($post, true));
         //error_log(var_export($post, true));
         // Checks whether the submitted data passed the validation rules.
-        if (!$this->validateData($post, [
-            'nome' => 'required|max_length[255]|min_length[2]', //TODO add more validation
-            'cognome' => 'required|max_length[255]|min_length[2]',
-        ])) {
+        if (
+            !$this->validateData($post, [
+                'nome' => 'required|max_length[255]|min_length[2]',
+                //TODO add more validation
+                'cognome' => 'required|max_length[255]|min_length[2]',
+            ])
+        ) {
             // The validation fails, so returns the form.
             return view('templates/header', ['title' => 'Segreteria'])
                 . view('segreteria/docenti/add')
@@ -45,7 +48,7 @@ class Docenti extends BaseController
         }
 
         $error = "";
-        DocentiData::addDocente((object)$post, $error);
+        DocentiData::addDocente((object) $post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
@@ -98,6 +101,7 @@ class Docenti extends BaseController
 
         if (!$this->request->is('post')) {
             $docente = DocentiData::getDocente($this->request->getGet('id'));
+            error_log("Docente: " . var_export($docente, true));
             $data['docente'] = $docente;
             return view('templates/header', ['title' => 'Segreteria'])
                 . view('segreteria/docenti/edit', $data)
@@ -107,11 +111,14 @@ class Docenti extends BaseController
         $post = $this->request->getPost(['id_docente', 'nome', 'cognome', 'email', 'password']);
         //error_log(var_export($post, true));
         // Checks whether the submitted data passed the validation rules.
-        if (!$this->validateData($post, [
-            'nome' => 'required|max_length[255]|min_length[2]', //TODO add more validation
-            'cognome' => 'required|max_length[255]|min_length[2]',
-            'email' => 'required|max_length[255]|min_length[2]|valid_email',
-        ])) {
+        if (
+            !$this->validateData($post, [
+                'nome' => 'required|max_length[255]|min_length[2]',
+                //TODO add more validation
+                'cognome' => 'required|max_length[255]|min_length[2]',
+                'email' => 'required|max_length[255]|min_length[2]|valid_email',
+            ])
+        ) {
             // The validation fails, so returns the form.
             return view('templates/header', ['title' => 'Segreteria'])
                 . view('segreteria/docenti/edit', $data)
@@ -119,9 +126,9 @@ class Docenti extends BaseController
         }
         $error = "";
         if (empty($post['password'])) {
-            DocentiData::updateDocenteNoPassword((object)$post, $error);
+            DocentiData::updateDocenteNoPassword((object) $post, $error);
         } else {
-            DocentiData::updateDocente((object)$post, $error);
+            DocentiData::updateDocente((object) $post, $error);
         }
         if (!empty($error)) {
             error_log("error");

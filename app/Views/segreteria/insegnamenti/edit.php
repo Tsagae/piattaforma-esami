@@ -7,6 +7,7 @@ if (isset($insegnamento)) {
         'semestre' => esc($insegnamento->semestre),
         'id_cdl' => esc($insegnamento->id_cdl),
         'id_docente' => esc($insegnamento->id_docente),
+        'anno' => esc($insegnamento->anno)
     ];
 } else {
     $formValues = [
@@ -14,6 +15,7 @@ if (isset($insegnamento)) {
         'semestre' => esc(set_value('semestre')),
         'id_cdl' => esc(set_value('id_cdl')),
         'id_docente' => esc(set_value('id_docente')),
+        'anno' => esc(set_value('anno')),
     ];
 } ?>
 <div class="col-md-7 col-lg-8">
@@ -44,6 +46,16 @@ if (isset($insegnamento)) {
                     <?php endif ?>
                 </select>
             </div>
+
+            <div class="col-sm-6">
+                <label for="anno" class="form-label">Anno</label>
+                <input type="number" class="form-control" name="anno" placeholder="" value="<?= $formValues['anno'] ?>"
+                    required="">
+                <div class="invalid-feedback">
+                    Anno obbligatorio.
+                </div>
+            </div>
+
         </div>
         <div class="row g-3">
             <div class="row g-3 mb-3">

@@ -68,7 +68,7 @@ class Insegnamenti extends BaseController
                 . view('templates/footer');
         }
 
-        $post = $this->request->getPost(['semestre', 'nome', 'id_docente', 'id_cdl']);
+        $post = $this->request->getPost(['semestre', 'nome', 'id_docente', 'id_cdl', 'anno']);
         error_log("post" . var_export($post, true));
         if (
             !$this->validateData($post, [
@@ -77,6 +77,7 @@ class Insegnamenti extends BaseController
                 //TODO add more validation
                 'id_docente' => 'required',
                 'id_cdl' => 'required',
+                'anno' => 'required',
             ])
         ) {
             // The validation fails, so returns the form.
@@ -117,15 +118,19 @@ class Insegnamenti extends BaseController
         $data['docenti'] = $docenti;
         $data['allCdl'] = $allCdl;
         //$data['docenti']
+        $error = "";
         if (!$this->request->is('post')) {
-            $insegnamento = InsegnamentiData::getInsegnamento($this->request->getGet('id'));
+            $insegnamento = InsegnamentiData::getInsegnamento($this->request->getGet('id'), $error);
             $data['insegnamento'] = $insegnamento;
+            if (!empty($error)) {
+                $data['queryError'] = $error;
+            }
             return view('templates/header', ['title' => 'Segreteria'])
                 . view('segreteria/insegnamenti/edit', $data)
                 . view('templates/footer');
         }
 
-        $post = $this->request->getPost(['id_insegnamento', 'semestre', 'nome', 'id_docente', 'id_cdl', 'propedeuticita[]']);
+        $post = $this->request->getPost(['id_insegnamento', 'semestre', 'nome', 'id_docente', 'id_cdl', 'propedeuticita[]', 'anno']);
         error_log("post" . var_export($post, true));
         if (
             !$this->validateData($post, [
@@ -135,6 +140,7 @@ class Insegnamenti extends BaseController
                 //TODO add more validation
                 'id_docente' => 'required',
                 'id_cdl' => 'required',
+                'anno' => 'required',
             ])
         ) {
             // The validation fails, so returns the form.

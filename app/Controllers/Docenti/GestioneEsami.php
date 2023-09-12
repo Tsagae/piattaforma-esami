@@ -175,7 +175,7 @@ class GestioneEsami extends BaseController
                 . esc($error)
                 . view('templates/footer');
         }
-        $insegnamento = InsegnamentiData::getInsegnamento($esame->id_insegnamento);
+        $insegnamento = InsegnamentiData::getInsegnamento($esame->id_insegnamento, $error);
         $data['$insegnamento'] = $insegnamento;
         if (!empty($error)) {
             return view('templates/header', ['title' => 'Docenti'])
@@ -193,7 +193,6 @@ class GestioneEsami extends BaseController
 
     public function editPost(): string
     {
-
         helper('form');
 
         $data = [];
@@ -230,11 +229,132 @@ class GestioneEsami extends BaseController
             error_log("error");
             $data['queryError'] = $error;
             return view('templates/header', ['title' => 'Docenti'])
-                . view('docenti/esami/edit', ['esame' => (object) $post])
+                . "<h1>$error</h1>"
                 . view('templates/footer');
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h3>Esame modificato correttamente</h3>'
+            . view('templates/footer');
+    }
+
+    public function listValutazioni(): string
+    {
+        helper('form');
+
+        $get = $this->request->getGet(['id']);
+
+        $error = "";
+        $esame = EsamiData::getEsame($get['id'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        $resAuth = $this->autenticaDocente($esame->id_docente);
+        if ($resAuth != null)
+            return $resAuth;
+
+        $studenti = EsamiData::getIscrizioniByIdEsame($get['id'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Docenti'])
+                . esc($error)
+                . view('templates/footer');
+        }
+
+        $itemsStudenti = [];
+        foreach ($studenti as $studente) {
+            $item = new \stdClass();
+            $item->head = $studente->matricola;
+            $item->body = [$studente->nome, $studente->cognome, "Voto: $studente->voto"];
+            $item->buttons = [
+                (object) [
+                    "link" => "/docenti/esami/valutazioni/valuta?matricola=$studente->matricola&idesame=$esame->id_esame",
+                    "style" => "btn btn-primary m-1",
+                    "text" => "Valuta"
+                ],
+            ];
+            $itemsStudenti[] = $item;
+        }
+
+        $data['items'] = $itemsStudenti;
+        $data['noRecordsText'] = "Non ci sono studenti iscritti a questo esame";
+        $title = esc("Valutazioni " . $esame->nome_insegnamento . " " . $esame->id_cdl . " " . $esame->data);
+        $numIscritti = count($studenti);
+        return view('templates/header', ['title' => 'Docenti'])
+            . "<h1>$title</h1>"
+            . "Iscritti: $numIscritti"
+            . view("templates/list", $data)
+            . view('templates/footer');
+    }
+
+    public function valutaGet(): string
+    {
+        helper('form');
+
+        $get = $this->request->getGet(['matricola', 'idesame']);
+
+        $error = "";
+        $valutazione = EsamiData::getIscrizioneEsame($get['matricola'], $get['idesame'], $error);
+        if (!empty($error)) {
+            $data['error'] = $error;
+            return view('templates/header', ['title' => 'Docenti'])
+                . view('templates/valutazione', $data)
+                . view('templates/footer');
+        }
+
+        $resAuth = $this->autenticaDocente($valutazione->id_docente);
+        if ($resAuth != null)
+            return $resAuth;
+
+
+        $data['valutazione'] = $valutazione;
+        return view('templates/header', ['title' => 'Docenti'])
+            . view('docenti/valutazione', $data)
+            . view('templates/footer');
+    }
+
+    public function valutaPost(): string
+    {
+        helper('form');
+
+        $data = [];
+        $error = "";
+        $valutazione = new \stdClass();
+        $post = $this->request->getPost(['id_esame', 'id_docente', 'matricola', 'voto']);
+        if (
+            !$this->validateData($post, [
+                'id_esame' => 'required',
+                'id_docente' => 'required',
+                'matricola' => 'required',
+                'voto' => 'required',
+            ])
+        ) {
+            $valutazione = EsamiData::getIscrizioneEsame($post['matricola'], $post['idesame'], $error);
+            if (!empty($error)) {
+                $data['error'] = $error;
+                return view('templates/header', ['title' => 'Docenti'])
+                    . view('templates/valutazione', $data)
+                    . view('templates/footer');
+            }
+            return view('templates/header', ['title' => 'Docenti'])
+                . view('docenti/esami/edit', ['valutazione' => $valutazione])
+                . view('templates/footer');
+        }
+
+        $resAuth = $this->autenticaDocente($post['id_docente']);
+        if ($resAuth != null)
+            return $resAuth;
+
+        EsamiData::updateValutazione((object) $post, $error);
+        if (!empty($error)) {
+            error_log("error");
+            $data['queryError'] = $error;
+            return view('templates/header', ['title' => 'Docenti'])
+                . "$error"
+                . view('templates/footer');
+        }
+        return view('templates/header', ['title' => 'Docenti'])
+            . '<h3>Valutazione aggiornata correttamente</h3>'
             . view('templates/footer');
     }
 }

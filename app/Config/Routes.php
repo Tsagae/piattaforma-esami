@@ -76,7 +76,10 @@ $routes->match(['get', 'post'], '/segreteria/insegnamenti/delete', [Insegnamenti
 
 
 //Docenti
-$routes->get('/docenti', [\App\Controllers\Docenti\Index::class, 'listInsegnamenti']);
+$routes->get('/docenti', [\App\Controllers\Docenti\Index::class, 'index']);
+$routes->get('/docenti/insegnamenti', [\App\Controllers\Docenti\Index::class, 'listInsegnamenti']);
+$routes->get('/docenti/esamipassati', [\App\Controllers\Docenti\Index::class, 'listEsamiPassati']);
+$routes->get('/docenti/prossimiesami', [\App\Controllers\Docenti\Index::class, 'listProssimiEsami']);
 //Docenti/Esami
 $routes->get('/docenti/esami/add', [GestioneEsami::class, 'addGet']);
 $routes->post('/docenti/esami/add', [GestioneEsami::class, 'addPost']);
@@ -84,14 +87,26 @@ $routes->get('/docenti/esami/delete', [GestioneEsami::class, 'deleteGet']);
 $routes->post('/docenti/esami/delete', [GestioneEsami::class, 'deletePost']);
 $routes->get('/docenti/esami/edit', [GestioneEsami::class, 'editGet']);
 $routes->post('/docenti/esami/edit', [GestioneEsami::class, 'editPost']);
+//Docenti/Esami/Valutazioni
+$routes->get('/docenti/esami/valutazioni', [GestioneEsami::class, 'listValutazioni']);
+$routes->get('/docenti/esami/valutazioni/valuta', [GestioneEsami::class, 'valutaGet']);
+$routes->post('/docenti/esami/valutazioni/valuta', [GestioneEsami::class, 'valutaPost']);
+
 
 
 //Studenti
 $routes->get('/studenti', [\App\Controllers\Studenti\Index::class, 'index']);
+//Studenti/Cdl
+$routes->get('/studenti/cdl', [\App\Controllers\Studenti\Index::class, 'cdlList']);
 //Studenti/Esami
 $routes->get('/studenti/esami/prossimiesami', [\App\Controllers\Studenti\GestioneEsami::class, 'listNotIscrittoEsami']);
 $routes->get('/studenti/esami/iscrizioni', [\App\Controllers\Studenti\GestioneEsami::class, 'listIscrittoEsami']);
 $routes->match(['get', 'post'], '/studenti/esami/iscriviti', [\App\Controllers\Studenti\GestioneEsami::class, 'iscriviti']);
+$routes->match(['get', 'post'], '/studenti/esami/cancella', [\App\Controllers\Studenti\GestioneEsami::class, 'deleteIscrizione']);
+//Studenti/Carriera
+$routes->get('/studenti/carriera', [\App\Controllers\Studenti\Carriera::class, 'listCarriera']);
+$routes->get('/studenti/carrieravalida', [\App\Controllers\Studenti\Carriera::class, 'listCarrieraValida']);
+
 
 
 //Testing
