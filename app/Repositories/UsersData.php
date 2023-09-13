@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Database\PostgresConnection;
 use Exception;
 
 class UsersData
@@ -13,7 +14,7 @@ class UsersData
      */
     public static function getUtenteByEmail(string $email, string &$error): ?object
     {
-        $conn = \App\Database\PostgresConnection::get();
+        $conn = PostgresConnection::get();
         try {
             $res = $conn->selectProcedure("db_esami.getutentebyemail", $email);
         } catch (Exception $e) {
@@ -25,10 +26,25 @@ class UsersData
             $error = "Errore nella query";
             return null;
         } else {
-            if(count($res) == 1){
+            if (count($res) == 1) {
                 return $res[0];
             }
         }
         return null;
+    }
+
+    public static function updateUserPassword(int $id_utente, string $password, string &$error): void
+    {
+        $conn = PostgresConnection::get();
+        try {
+            $conn->callProcedure(
+                "db_esami.update_user_password",
+                $id_utente,
+                $password
+            );
+        } catch (Exception $e) {
+            error_log($e);
+            $error = "Errore nell'aggiornamento della password";
+        }
     }
 }

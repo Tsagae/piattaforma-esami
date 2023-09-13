@@ -115,5 +115,62 @@ class InsegnamentiData
         }
     }
 
+    public static function getPropedeuticiByIdInsegnamento(int $id_insegnamento, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_propedeutici_by_id_insegnamento", $id_insegnamento);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare insegnamenti propedeutici";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
 
+    public static function getPropedeuticiPossibiliByIdInsegnamento(int $id_insegnamento, string &$error): array
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            return $conn->selectProcedure("db_esami.get_propedeutici_possibili_by_id_insegnamento", $id_insegnamento);
+        } catch (Exception $e) {
+            $error = "Impossibile recuperare insegnamenti";
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+    public static function addPropedeutico(int $id_insegnamento, int $id_richiesto, string &$error): void
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            $conn->callProcedure(
+                "db_esami.add_propedeutico",
+                $id_insegnamento,
+                $id_richiesto
+            );
+        } catch (Exception $e) {
+            $error = "Impossibile aggiungere insegnamento propedeutico";
+            error_log($e->getMessage());
+        }
+    }
+
+
+    public static function deletePropedeutico(int $id_insegnamento, int $id_richiesto, string &$error): void
+    {
+        $conn = PostgresConnection::get();
+        $error = "";
+        try {
+            $conn->callProcedure(
+                "db_esami.delete_propedeutico",
+                $id_insegnamento,
+                $id_richiesto
+            );
+        } catch (Exception $e) {
+            $error = "Impossibile rimuovere insegnamento propedeutico";
+            error_log($e->getMessage());
+        }
+    }
 }

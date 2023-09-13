@@ -75,5 +75,6 @@ class Filters extends BaseConfig
         'authsegreteria' => ['before' => ['segreteria', 'segreteria/*',]],
         'authdocenti' => ['before' => ['docenti', 'docenti/*',]],
         'authstudenti' => ['before' => ['studenti', 'studenti/*',]],
+        'auth' => ['before' => ['profilo', 'profilo/*',]],
     ];
 }

@@ -119,6 +119,13 @@ class Insegnamenti extends BaseController
         $data['allCdl'] = $allCdl;
         //$data['docenti']
         $error = "";
+        $propedeutici = InsegnamentiData::getPropedeuticiByIdInsegnamento($this->request->getGet('id'), $error);
+        $data['propedeutici'] = $propedeutici;
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Segreteria'])
+                . esc($error)
+                . view('templates/footer');
+        }
         if (!$this->request->is('post')) {
             $insegnamento = InsegnamentiData::getInsegnamento($this->request->getGet('id'), $error);
             $data['insegnamento'] = $insegnamento;
@@ -197,4 +204,95 @@ class Insegnamenti extends BaseController
             . '<h3>Insegnamento rimosso correttamente</h3>'
             . view('templates/footer');
     }
+
+    public function addPropedeutico()
+    {
+        helper('form');
+        $error = "";
+        $id_insegnamento = $this->request->getGet('id_insegnamento');
+        $propedeutici = InsegnamentiData::getPropedeuticiPossibiliByIdInsegnamento($id_insegnamento, $error);
+        $data['id_insegnamento'] = $id_insegnamento;
+        $data['propedeutici'] = $propedeutici;
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Segreteria'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        if (!$this->request->is('post')) {
+            return view('templates/header', ['title' => 'Segreteria'])
+                . view('segreteria/insegnamenti/addpropedeutico', $data)
+                . view('templates/footer');
+        }
+        $post = $this->request->getPost(['id_richiesto', 'id_insegnamento']);
+        if (
+            !$this->validateData($post, [
+                'id_insegnamento' => 'required',
+                'id_richiesto' => 'required',
+            ])
+        ) {
+            return view('templates/header', ['title' => 'Segreteria'])
+                . view('segreteria/insegnamenti/addpropedeutico', $data)
+                . view('templates/footer');
+        }
+
+        $error = "";
+        InsegnamentiData::addPropedeutico($post['id_insegnamento'], $post['id_richiesto'], $error);
+        if (!empty($error)) {
+            error_log("error");
+            $data['queryError'] = $error;
+            return view('templates/header', ['title' => 'Segreteria'])
+                . view('segreteria/insegnamenti/addpropedeutico', $data)
+                . view('templates/footer');
+        }
+        return view('templates/header', ['title' => 'Segreteria'])
+            . '<h1>Propedeuticità aggiunta correttamente</h1>'
+            . view('templates/redirect', ['url' => "/segreteria/insegnamenti/edit?id=$id_insegnamento", 'delay' => 3])
+            . view('templates/footer');
+    }
+
+    public function deletePropedeutico()
+    {
+        $id_insegnamento = $this->request->getGet('id_insegnamento');
+        $id_richiesto = $this->request->getGet('id_richiesto');
+        $error = "";
+        $insegnamento = InsegnamentiData::getInsegnamento($id_insegnamento, $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Segreteria'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        $richiesto = InsegnamentiData::getInsegnamento($id_richiesto, $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Segreteria'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        if (!$this->request->is('post')) {
+
+            return view('templates/header', ['title' => 'Segreteria'])
+                . view('templates/confirmation', [
+                    'submitValue' => "$id_richiesto",
+                    'text' => "Cacellazione propedeutico $richiesto->nome da $insegnamento->nome",
+                    'confirmText' => 'Rimuovi',
+                    'cancelRedirect' => "segreteria/insegnamenti/edit?id=$id_insegnamento",
+                    'cancelText' => 'Annulla'
+                ])
+                . view('templates/footer');
+        }
+
+        $post = $this->request->getPost(['submitValue']);
+
+        $error = "";
+        InsegnamentiData::deletePropedeutico($id_insegnamento, $post['submitValue'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Segreteria'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        return view('templates/header', ['title' => 'Segreteria'])
+            . '<h3>Insegnamento rimosso correttamente</h3>'
+            . view('templates/redirect', ['url' => "/segreteria/insegnamenti/edit?id=$id_insegnamento", 'delay' => 3])
+            . view('templates/footer');
+    }
+
 }

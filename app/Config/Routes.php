@@ -45,6 +45,10 @@ $routes->get('logout', [LoginController::class, 'logout']);
 $routes->match(['get', 'post'], 'secondtest/create', [SecondController::class, 'create']);
 $routes->match(['get', 'post'], 'login', [LoginController::class, 'login']);
 
+//Profilo
+$routes->get('/profilo', [\App\Controllers\UserController::class, 'profileGet']);
+$routes->post('/profilo', [\App\Controllers\UserController::class, 'profilePost']);
+
 //Segreteria
 $routes->get('/segreteria', [\App\Controllers\Segreteria\Index::class, 'index']);
 $routes->get('/segreteria/utenti', [Utenti::class, 'index']);
@@ -73,6 +77,9 @@ $routes->match(['get', 'post'], '/segreteria/insegnamenti', [Insegnamenti::class
 $routes->match(['get', 'post'], '/segreteria/insegnamenti/add', [Insegnamenti::class, 'add']);
 $routes->match(['get', 'post'], '/segreteria/insegnamenti/edit', [Insegnamenti::class, 'edit']);
 $routes->match(['get', 'post'], '/segreteria/insegnamenti/delete', [Insegnamenti::class, 'delete']);
+$routes->match(['get', 'post'], 'segreteria/insegnamenti/addpropedeutico', [Insegnamenti::class, 'addPropedeutico']);
+$routes->match(['get', 'post'], 'segreteria/insegnamenti/deletepropedeutico', [Insegnamenti::class, 'deletePropedeutico']);
+
 
 
 //Docenti
