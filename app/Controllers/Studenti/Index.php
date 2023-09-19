@@ -19,23 +19,23 @@ class Index extends BaseController
             . view('templates/menu', [
                 'title' => 'Studente',
                 'items' => [
-                    (object) [
+                    (object)[
                         "link" => "/studenti/esami/prossimiesami",
                         "text" => "Iscriviti a un Esame"
                     ],
-                    (object) [
+                    (object)[
                         "link" => "/studenti/esami/iscrizioni",
                         "text" => "Iscrizioni Confermate"
                     ],
-                    (object) [
+                    (object)[
                         "link" => "/studenti/carriera",
                         "text" => "Visualizza Carriera"
                     ],
-                    (object) [
+                    (object)[
                         "link" => "/studenti/carrieravalida",
                         "text" => "Visualizza Carriera Valida"
                     ],
-                    (object) [
+                    (object)[
                         "link" => "/studenti/cdl",
                         "text" => "Visualizza CDL"
                     ],
@@ -47,7 +47,21 @@ class Index extends BaseController
     public function cdlList(): string
     {
         $error = "";
-        $id_cdl = session()->get('studente')->id_cdl;
+        $get_cdl = $this->request->getGet('idcdl');
+        $id_cdl = empty($get_cdl) ? session()->get('studente')->id_cdl : $get_cdl;
+        $allCdl = CdlData::getAllCdl();
+        $options = [];
+        $firstOption = null;
+        foreach ($allCdl as $cdl) {
+            $option = new \stdClass();
+            $option->value = $cdl->id_cdl;
+            $option->text = "$cdl->nome $cdl->tipo $cdl->id_cdl";
+            $options[] = $option;
+            if ($option->value == $id_cdl) {
+                $firstOption = $option;
+            }
+        }
+
         $data['insegnamenti'] = InsegnamentiData::get_insegnamenti_by_cdl($id_cdl, $error);
         if (!empty($error)) {
             return view('templates/header', ['title' => 'Studenti'])
@@ -68,6 +82,7 @@ class Index extends BaseController
         $data['noRecordsText'] = "Nessun insegnamento presente per il corso di laurea $id_cdl";
         return view('templates/header', ['title' => 'Studenti'])
             . "<h1>Insegnamenti $id_cdl</h1>"
+            . view("templates/selection", ['options' => $options, 'firstOption' => $firstOption])
             . view("templates/list", $data)
             . view('templates/footer');
 

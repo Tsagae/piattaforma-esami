@@ -37,8 +37,7 @@ class Archivio extends BaseController
     {
         $error = "";
         $matricola = $this->request->getGet('matricola');
-        $matricola = gettype($matricola) == 'integer' ? $matricola : -1;
-        $carriera = ArchivioData::getAllVerbaliByMatricola($matricola, $error);
+        $carriera = ArchivioData::getAllVerbaliByMatricolaArchiviata($matricola, $error);
         return $this->listCarriera($carriera, $error, 'Carriera');
     }
 
@@ -46,12 +45,11 @@ class Archivio extends BaseController
     {
         $error = "";
         $matricola = $this->request->getGet('matricola');
-        $matricola = gettype($matricola) == 'integer' ? $matricola : -1;
         $carriera = ArchivioData::getCarrieraValidaArchiviata($matricola, $error);
         return $this->listCarriera($carriera, $error, 'Carriera Valida');
     }
 
-    private function listCarriera(array $carriera, string $errore, string $header): string
+    private function listCarriera(array $carriera, string $error, string $header): string
     {
         if (!empty($error)) {
             return view('templates/header', ['title' => 'Segreteria'])
@@ -63,7 +61,7 @@ class Archivio extends BaseController
         foreach ($carriera as $esame) {
             $item = new \stdClass();
             $item->head = $esame->nome_insegnamento . " " . $esame->nome_docente . " " . $esame->cognome_docente;
-            $item->body = [$esame->voto, $esame->data_verbalizzazione];
+            $item->body = ["Voto: $esame->voto", "Data Verbalizzazione: $esame->data_verbalizzazione"];
             $item->buttons = [];
             $items[] = $item;
         }

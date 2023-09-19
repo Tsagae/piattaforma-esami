@@ -86,6 +86,7 @@ class PostgresConnection
         $argsString = var_export($argArr, true);
         error_log("argArr: $argsString\n");
         */
+        //error_log("Query: " . "$query$procArgs;");
         $conn = $this->connect();
         $dbRes = pg_query_params($conn, "$query$procArgs;", $argArr);
         if ($dbRes === false)

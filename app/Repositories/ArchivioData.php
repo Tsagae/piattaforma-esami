@@ -15,11 +15,11 @@ class ArchivioData
         return $conn->selectProcedure("db_esami.get_all_studenti_archiviati");
     }
 
-    public static function getAllVerbaliByMatricola(int $matricola_archiviata, string &$error): array
+    public static function getAllVerbaliByMatricolaArchiviata(int $matricola_archiviata, string &$error): array
     {
         $conn = PostgresConnection::get();
         try {
-            $res = $conn->selectProcedure("db_esami.get_all_verbali_by_matricola", $matricola_archiviata);
+            $res = $conn->selectProcedure("db_esami.get_all_verbali_by_matricola_archiviata", $matricola_archiviata);
         } catch (Exception $e) {
             error_log($e);
             $error = "Errore nella selezione dei verbali";

@@ -15,12 +15,16 @@ class CdlData
      * string tipo,
      * string id_cdl
      * }
-     * @throws Exception
      */
     public static function getAllCdl(): array
     {
         $conn = PostgresConnection::get();
-        return $conn->executeQuery("select * from db_esami.cdl");
+        try {
+            return $conn->executeQuery("select * from db_esami.cdl");
+        } catch (Exception $e) {
+            error_log($e);
+        }
+        return [];
     }
 
     public static function addCdl(object $cdl, string &$error)
