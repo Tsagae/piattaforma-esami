@@ -25,6 +25,10 @@ class Index extends BaseController
                         "link" => "/segreteria/insegnamenti",
                         "text" => "Gestione Insegnamenti"
                     ],
+                    (object) [
+                        "link" => "/segreteria/archivio",
+                        "text" => "Visualizza Archivio"
+                    ],
                 ]
             ])
             . view('templates/footer');

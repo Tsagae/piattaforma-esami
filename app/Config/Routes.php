@@ -7,6 +7,7 @@ use App\Controllers\Docenti\GestioneEsami;
 use App\Controllers\LoginController;
 use App\Controllers\Pages;
 use App\Controllers\SecondController;
+use App\Controllers\Segreteria\Archivio;
 use App\Controllers\Segreteria\Cdl;
 use App\Controllers\Segreteria\Docenti;
 use App\Controllers\Segreteria\Segretari;
@@ -79,6 +80,10 @@ $routes->match(['get', 'post'], '/segreteria/insegnamenti/edit', [Insegnamenti::
 $routes->match(['get', 'post'], '/segreteria/insegnamenti/delete', [Insegnamenti::class, 'delete']);
 $routes->match(['get', 'post'], 'segreteria/insegnamenti/addpropedeutico', [Insegnamenti::class, 'addPropedeutico']);
 $routes->match(['get', 'post'], 'segreteria/insegnamenti/deletepropedeutico', [Insegnamenti::class, 'deletePropedeutico']);
+//Segreteria/archivio
+$routes->get('/segreteria/archivio', [Archivio::class, 'listStudentiArchiviati']);
+$routes->get('/segreteria/archivio/carriera', [Archivio::class, 'listCarrieraArchiviata']);
+$routes->get('/segreteria/archivio/carrieravalida', [Archivio::class, 'listCarrieraValida']);
 
 
 
