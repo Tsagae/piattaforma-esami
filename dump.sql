@@ -16,17 +16,43 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+DROP DATABASE postgres;
 --
--- Name: db_esami; Type: SCHEMA; Schema: -; Owner: postgres
+-- Name: postgres; Type: DATABASE; Schema: -; Owner: -
+--
+
+CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
+
+
+\connect postgres
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: DATABASE postgres; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
+-- Name: db_esami; Type: SCHEMA; Schema: -; Owner: -
 --
 
 CREATE SCHEMA db_esami;
 
 
-ALTER SCHEMA db_esami OWNER TO postgres;
-
 --
--- Name: tipo_laurea; Type: TYPE; Schema: db_esami; Owner: postgres
+-- Name: tipo_laurea; Type: TYPE; Schema: db_esami; Owner: -
 --
 
 CREATE TYPE db_esami.tipo_laurea AS ENUM (
@@ -36,10 +62,8 @@ CREATE TYPE db_esami.tipo_laurea AS ENUM (
 );
 
 
-ALTER TYPE db_esami.tipo_laurea OWNER TO postgres;
-
 --
--- Name: add_cdl(character varying, character varying, db_esami.tipo_laurea); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: add_cdl(character varying, character varying, db_esami.tipo_laurea); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.add_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea)
@@ -53,10 +77,8 @@ END ;
 $$;
 
 
-ALTER PROCEDURE db_esami.add_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea) OWNER TO postgres;
-
 --
--- Name: add_docente(character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: add_docente(character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.add_docente(IN p_nome character varying, IN p_cognome character varying)
@@ -94,10 +116,8 @@ END ;
 $$;
 
 
-ALTER PROCEDURE db_esami.add_docente(IN p_nome character varying, IN p_cognome character varying) OWNER TO postgres;
-
 --
--- Name: add_esame(date, integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: add_esame(date, integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.add_esame(IN p_data date, IN p_id_insegnamento integer, IN p_id_docente integer)
@@ -112,10 +132,8 @@ END ;
 $$;
 
 
-ALTER PROCEDURE db_esami.add_esame(IN p_data date, IN p_id_insegnamento integer, IN p_id_docente integer) OWNER TO postgres;
-
 --
--- Name: add_insegnamento(integer, character varying, integer, character varying, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: add_insegnamento(integer, character varying, integer, character varying, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.add_insegnamento(IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer)
@@ -129,10 +147,8 @@ END ;
 $$;
 
 
-ALTER PROCEDURE db_esami.add_insegnamento(IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer) OWNER TO postgres;
-
 --
--- Name: add_propedeutico(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: add_propedeutico(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.add_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer)
@@ -146,10 +162,8 @@ END ;
 $$;
 
 
-ALTER PROCEDURE db_esami.add_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer) OWNER TO postgres;
-
 --
--- Name: add_segretario(character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: add_segretario(character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.add_segretario(IN p_nome character varying, IN p_cognome character varying)
@@ -187,10 +201,8 @@ END ;
 $$;
 
 
-ALTER PROCEDURE db_esami.add_segretario(IN p_nome character varying, IN p_cognome character varying) OWNER TO postgres;
-
 --
--- Name: add_studente(character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: add_studente(character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.add_studente(IN p_nome character varying, IN p_cognome character varying, IN p_id_cdl character varying)
@@ -228,10 +240,8 @@ END ;
 $$;
 
 
-ALTER PROCEDURE db_esami.add_studente(IN p_nome character varying, IN p_cognome character varying, IN p_id_cdl character varying) OWNER TO postgres;
-
 --
--- Name: delete_cdl(character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_cdl(character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_cdl(IN p_id_cdl character varying)
@@ -244,10 +254,8 @@ CREATE PROCEDURE db_esami.delete_cdl(IN p_id_cdl character varying)
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_cdl(IN p_id_cdl character varying) OWNER TO postgres;
-
 --
--- Name: delete_docente(integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_docente(integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_docente(IN p_id_docente integer)
@@ -260,10 +268,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_docente(IN p_id_docente integer) OWNER TO postgres;
-
 --
--- Name: delete_esame(integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_esame(integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_esame(IN p_id_esame integer)
@@ -276,10 +282,8 @@ CREATE PROCEDURE db_esami.delete_esame(IN p_id_esame integer)
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_esame(IN p_id_esame integer) OWNER TO postgres;
-
 --
--- Name: delete_insegnamento(integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_insegnamento(integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_insegnamento(IN p_id_insegnamento integer)
@@ -292,10 +296,8 @@ CREATE PROCEDURE db_esami.delete_insegnamento(IN p_id_insegnamento integer)
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_insegnamento(IN p_id_insegnamento integer) OWNER TO postgres;
-
 --
--- Name: delete_iscrizione_esame(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_iscrizione_esame(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_iscrizione_esame(IN p_matricola integer, IN p_id_esame integer)
@@ -311,10 +313,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_iscrizione_esame(IN p_matricola integer, IN p_id_esame integer) OWNER TO postgres;
-
 --
--- Name: delete_propedeutico(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_propedeutico(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer)
@@ -327,10 +327,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer) OWNER TO postgres;
-
 --
--- Name: delete_segretario(integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_segretario(integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_segretario(IN p_id_segreteria integer)
@@ -343,10 +341,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_segretario(IN p_id_segreteria integer) OWNER TO postgres;
-
 --
--- Name: delete_segretario_before_studente_trigger(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: delete_segretario_before_studente_trigger(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.delete_segretario_before_studente_trigger() RETURNS trigger
@@ -360,10 +356,8 @@ END;
 $$;
 
 
-ALTER FUNCTION db_esami.delete_segretario_before_studente_trigger() OWNER TO postgres;
-
 --
--- Name: delete_studente(integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: delete_studente(integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.delete_studente(IN p_matricola integer)
@@ -376,10 +370,8 @@ CREATE PROCEDURE db_esami.delete_studente(IN p_matricola integer)
 $$;
 
 
-ALTER PROCEDURE db_esami.delete_studente(IN p_matricola integer) OWNER TO postgres;
-
 --
--- Name: delete_utente_before_studente_trigger(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: delete_utente_before_studente_trigger(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.delete_utente_before_studente_trigger() RETURNS trigger
@@ -393,10 +385,8 @@ END;
 $$;
 
 
-ALTER FUNCTION db_esami.delete_utente_before_studente_trigger() OWNER TO postgres;
-
 --
--- Name: get_all_esami_iscritto(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_all_esami_iscritto(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_all_esami_iscritto(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
@@ -419,17 +409,15 @@ begin
                e2.cognome_docente
         from db_esami.iscrizioni_esami e
                  inner join db_esami.esami_info e2 on e.id_esame = e2.id_esame
-    where e.matricola = p_matricola
-    order by e2.data desc;
+        where e.matricola = p_matricola
+        order by e2.data desc;
 end;
 
 $$;
 
 
-ALTER FUNCTION db_esami.get_all_esami_iscritto(p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_all_studenti_archiviati(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_all_studenti_archiviati(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_all_studenti_archiviati() RETURNS TABLE(matricola integer, id_cdl character varying, nome character varying, cognome character varying, laureato boolean, nome_cdl character varying, tipo_cdl db_esami.tipo_laurea)
@@ -446,13 +434,11 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_all_studenti_archiviati() OWNER TO postgres;
-
 --
--- Name: get_all_verbali_by_matricola(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_all_verbali_by_matricola_archiviata(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
-CREATE FUNCTION db_esami.get_all_verbali_by_matricola(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_all_verbali_by_matricola_archiviata(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
     LANGUAGE plpgsql
     AS $$
 begin
@@ -479,10 +465,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_all_verbali_by_matricola(p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_carriera_valida(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_carriera_valida(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_carriera_valida(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
@@ -505,7 +489,10 @@ begin
                e.cognome_docente
         from db_esami.get_all_esami_iscritto(p_matricola) e
         where e.voto >= 18
-          AND e.data = (select MAX(e2.data) from db_esami.esami e2 where e2.id_insegnamento = e.id_insegnamento)
+          AND not exists(select *
+                         from db_esami.get_all_esami_iscritto(p_matricola) e3
+                         where e3.id_insegnamento = e.id_insegnamento
+                           and e3.data > e.data)
         order by e.data desc;
 
 end;
@@ -513,10 +500,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_carriera_valida(p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_carriera_valida_archiviata(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_carriera_valida_archiviata(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_carriera_valida_archiviata(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
@@ -537,9 +522,12 @@ begin
                e.anno,
                e.nome_docente,
                e.cognome_docente
-        from db_esami.get_all_verbali_by_matricola(p_matricola) e
+        from db_esami.get_all_verbali_by_matricola_archiviata(p_matricola) e
         where e.voto >= 18
-          AND e.data = (select MAX(e2.data) from db_esami.esami e2 where e2.id_insegnamento = e.id_insegnamento)
+          AND not exists(select *
+                         from db_esami.get_all_esami_iscritto(p_matricola) e3
+                         where e3.id_insegnamento = e.id_insegnamento
+                           and e3.data > e.data)
         order by e.data desc;
 
 end;
@@ -547,10 +535,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_carriera_valida_archiviata(p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_cdl(character varying); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_cdl(character varying); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_cdl(p_id_cdl character varying) RETURNS TABLE(id_cdl character varying, nome character varying, tipo character varying)
@@ -568,10 +554,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_cdl(p_id_cdl character varying) OWNER TO postgres;
-
 --
--- Name: get_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_docente(p_id_docente integer) RETURNS TABLE(id_docente integer, nome character varying, cognome character varying, id_utente integer, email character varying)
@@ -595,10 +579,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_docente(p_id_docente integer) OWNER TO postgres;
-
 --
--- Name: get_docente_by_id_utente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_docente_by_id_utente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_docente_by_id_utente(p_id_utente integer) RETURNS TABLE(id_docente integer, nome character varying, cognome character varying, id_utente integer, email character varying)
@@ -619,10 +601,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_docente_by_id_utente(p_id_utente integer) OWNER TO postgres;
-
 --
--- Name: get_esame(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_esame(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_esame(p_id_esame integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying)
@@ -648,10 +628,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_esame(p_id_esame integer) OWNER TO postgres;
-
 --
--- Name: get_esami_by_cdl(character varying); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_esami_by_cdl(character varying); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_esami_by_cdl(p_id_cdl character varying) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying)
@@ -676,10 +654,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_esami_by_cdl(p_id_cdl character varying) OWNER TO postgres;
-
 --
--- Name: get_esami_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_esami_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_esami_by_id_docente(p_id_docente integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome character varying, id_cdl character varying)
@@ -703,10 +679,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_esami_by_id_docente(p_id_docente integer) OWNER TO postgres;
-
 --
--- Name: get_esami_futuri_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_esami_futuri_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_esami_futuri_by_id_docente(p_id_docente integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome character varying, id_cdl character varying)
@@ -730,10 +704,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_esami_futuri_by_id_docente(p_id_docente integer) OWNER TO postgres;
-
 --
--- Name: get_esami_not_iscritto(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_esami_not_iscritto(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_esami_not_iscritto(p_matricola integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying)
@@ -771,10 +743,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_esami_not_iscritto(p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_esami_passati_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_esami_passati_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_esami_passati_by_id_docente(p_id_docente integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome character varying, id_cdl character varying)
@@ -798,10 +768,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_esami_passati_by_id_docente(p_id_docente integer) OWNER TO postgres;
-
 --
--- Name: get_insegnamenti_by_cdl(character varying); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_insegnamenti_by_cdl(character varying); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_insegnamenti_by_cdl(p_id_cdl character varying) RETURNS TABLE(id_insegnamento integer, nome character varying, semestre integer, id_cdl character varying, id_docente integer, anno integer, docente_nome character varying, docente_cognome character varying)
@@ -825,10 +793,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_insegnamenti_by_cdl(p_id_cdl character varying) OWNER TO postgres;
-
 --
--- Name: get_insegnamenti_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_insegnamenti_by_id_docente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_insegnamenti_by_id_docente(p_id_docente integer) RETURNS TABLE(id_insegnamento integer, semestre integer, nome character varying, id_docente integer, id_cdl character varying)
@@ -845,10 +811,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_insegnamenti_by_id_docente(p_id_docente integer) OWNER TO postgres;
-
 --
--- Name: get_insegnamento(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_insegnamento(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_insegnamento(p_id_insegnamento integer) RETURNS TABLE(id_insegnamento integer, id_cdl character varying, semestre integer, nome character varying, id_docente integer, docente_nome character varying, docente_cognome character varying, anno integer)
@@ -871,10 +835,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_insegnamento(p_id_insegnamento integer) OWNER TO postgres;
-
 --
--- Name: get_iscrizione_esame(integer, integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_iscrizione_esame(integer, integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_iscrizione_esame(p_matricola integer, p_id_esame integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data_esame date, id_insegnamento integer, id_docente integer, nome_insegnamento character varying, nome_studente character varying, cognome_studente character varying, id_cdl character varying)
@@ -903,10 +865,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_iscrizione_esame(p_matricola integer, p_id_esame integer) OWNER TO postgres;
-
 --
--- Name: get_iscrizioni_by_id_esame(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_iscrizioni_by_id_esame(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_iscrizioni_by_id_esame(p_id_esame integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, nome character varying, cognome character varying, id_utente integer, id_cdl character varying)
@@ -930,10 +890,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_iscrizioni_by_id_esame(p_id_esame integer) OWNER TO postgres;
-
 --
--- Name: get_next_esami_iscritto(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_next_esami_iscritto(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_next_esami_iscritto(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
@@ -961,10 +919,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_next_esami_iscritto(p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_propedeutici_by_id_insegnamento(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_propedeutici_by_id_insegnamento(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_propedeutici_by_id_insegnamento(p_id_insegnamento integer) RETURNS TABLE(id_richiesto integer, nome_insegnamento character varying)
@@ -982,10 +938,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_propedeutici_by_id_insegnamento(p_id_insegnamento integer) OWNER TO postgres;
-
 --
--- Name: get_propedeutici_mancanti(integer, integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_propedeutici_mancanti(integer, integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_propedeutici_mancanti(p_insegnamento integer, p_matricola integer) RETURNS TABLE(id_richiesto integer)
@@ -1006,10 +960,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_propedeutici_mancanti(p_insegnamento integer, p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_propedeutici_possibili_by_id_insegnamento(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_propedeutici_possibili_by_id_insegnamento(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_propedeutici_possibili_by_id_insegnamento(p_id_insegnamento integer) RETURNS TABLE(id_insegnamento integer, nome_insegnamento character varying)
@@ -1031,10 +983,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_propedeutici_possibili_by_id_insegnamento(p_id_insegnamento integer) OWNER TO postgres;
-
 --
--- Name: get_segretario(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_segretario(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_segretario(p_id_segreteria integer) RETURNS TABLE(id_segreteria integer, nome character varying, cognome character varying, id_utente integer, email character varying, password character varying)
@@ -1059,10 +1009,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_segretario(p_id_segreteria integer) OWNER TO postgres;
-
 --
--- Name: get_segretario_by_id_utente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_segretario_by_id_utente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_segretario_by_id_utente(p_id_utente integer) RETURNS TABLE(id_segreteria integer, nome character varying, cognome character varying, id_utente integer, email character varying)
@@ -1084,10 +1032,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_segretario_by_id_utente(p_id_utente integer) OWNER TO postgres;
-
 --
--- Name: get_studente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_studente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_studente(p_matricola integer) RETURNS TABLE(matricola integer, nome character varying, cognome character varying, id_utente integer, id_cdl character varying, email character varying, password character varying)
@@ -1113,10 +1059,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_studente(p_matricola integer) OWNER TO postgres;
-
 --
--- Name: get_studente_by_id_utente(integer); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_studente_by_id_utente(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_studente_by_id_utente(p_id_utente integer) RETURNS TABLE(matricola integer, nome character varying, cognome character varying, id_utente integer, id_cdl character varying, email character varying)
@@ -1139,10 +1083,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_studente_by_id_utente(p_id_utente integer) OWNER TO postgres;
-
 --
--- Name: get_tipi_laurea(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_tipi_laurea(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_tipi_laurea() RETURNS TABLE(tipo character varying)
@@ -1155,10 +1097,8 @@ END;
 $$;
 
 
-ALTER FUNCTION db_esami.get_tipi_laurea() OWNER TO postgres;
-
 --
--- Name: get_utenti(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: get_utenti(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.get_utenti() RETURNS TABLE(id_utente integer, nome character varying, cognome character varying, email character varying, password character varying, ruolo text)
@@ -1180,10 +1120,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.get_utenti() OWNER TO postgres;
-
 --
--- Name: getutentebyemail(character varying); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: getutentebyemail(character varying); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.getutentebyemail(p_email character varying) RETURNS TABLE(id_utente integer, nome character varying, cognome character varying, email character varying, password character varying, ruolo text)
@@ -1207,10 +1145,8 @@ end;
 $$;
 
 
-ALTER FUNCTION db_esami.getutentebyemail(p_email character varying) OWNER TO postgres;
-
 --
--- Name: iscrivi_studente_a_esame(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: iscrivi_studente_a_esame(integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.iscrivi_studente_a_esame(IN p_matricola integer, IN p_id_esame integer)
@@ -1223,13 +1159,56 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.iscrivi_studente_a_esame(IN p_matricola integer, IN p_id_esame integer) OWNER TO postgres;
-
 --
--- Name: tr_delete_utente_before(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: tr_archivia_studente(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
-CREATE FUNCTION db_esami.tr_delete_utente_before() RETURNS trigger
+CREATE FUNCTION db_esami.tr_archivia_studente() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    var_laureato            bool;
+    var_countCarrieraValida int;
+    var_countEsamiCdl       int;
+BEGIN
+    select COUNT(*)
+    from db_esami.get_carriera_valida(OLD.matricola)
+    into var_countCarrieraValida;
+
+    select COUNT(*)
+    from db_esami.get_insegnamenti_by_cdl(OLD.id_cdl)
+    into var_countEsamiCdl;
+
+    if var_countCarrieraValida = var_countEsamiCdl then
+        var_laureato = true;
+    else
+        var_laureato = false;
+    end if;
+
+    insert into db_esami.archivio_studenti(matricola, nome, cognome, id_cdl, laureato, data_archiviazione)
+    select s.matricola, s.nome, s.cognome, s.id_cdl, var_laureato, current_date
+         from studenti s
+         where s.matricola = OLD.matricola;
+
+    insert into db_esami.archivio_verbali(id_esame, matricola_archiviata, data_verbalizzazione, voto)
+    select i.id_esame, i.matricola, i.data_verbalizzazione, i.voto
+    from db_esami.iscrizioni_esami i
+    where matricola = OLD.matricola
+      and i.voto is not null
+      and i.data_verbalizzazione is not null;
+
+    delete from db_esami.iscrizioni_esami where matricola = OLD.matricola;
+
+    RETURN OLD;
+END;
+$$;
+
+
+--
+-- Name: tr_delete_utente_after(); Type: FUNCTION; Schema: db_esami; Owner: -
+--
+
+CREATE FUNCTION db_esami.tr_delete_utente_after() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1240,10 +1219,8 @@ END;
 $$;
 
 
-ALTER FUNCTION db_esami.tr_delete_utente_before() OWNER TO postgres;
-
 --
--- Name: tr_limite_docente_insegnamenti(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: tr_limite_docente_insegnamenti(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.tr_limite_docente_insegnamenti() RETURNS trigger
@@ -1258,10 +1235,8 @@ END;
 $$;
 
 
-ALTER FUNCTION db_esami.tr_limite_docente_insegnamenti() OWNER TO postgres;
-
 --
--- Name: tr_restrizioni_iscrizione_esami(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: tr_restrizioni_iscrizione_esami(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.tr_restrizioni_iscrizione_esami() RETURNS trigger
@@ -1293,10 +1268,8 @@ END;
 $$;
 
 
-ALTER FUNCTION db_esami.tr_restrizioni_iscrizione_esami() OWNER TO postgres;
-
 --
--- Name: tr_singolo_esame_giorno_cdl(); Type: FUNCTION; Schema: db_esami; Owner: postgres
+-- Name: tr_singolo_esame_giorno_cdl(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
 CREATE FUNCTION db_esami.tr_singolo_esame_giorno_cdl() RETURNS trigger
@@ -1318,10 +1291,8 @@ END;
 $$;
 
 
-ALTER FUNCTION db_esami.tr_singolo_esame_giorno_cdl() OWNER TO postgres;
-
 --
--- Name: update_cdl(character varying, character varying, db_esami.tipo_laurea); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_cdl(character varying, character varying, db_esami.tipo_laurea); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea)
@@ -1336,10 +1307,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea) OWNER TO postgres;
-
 --
--- Name: update_docente(integer, character varying, character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_docente(integer, character varying, character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_docente(IN p_id_docente integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)
@@ -1360,10 +1329,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_docente(IN p_id_docente integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying) OWNER TO postgres;
-
 --
--- Name: update_esame(integer, date); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_esame(integer, date); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_esame(IN p_id_esame integer, IN p_data date)
@@ -1380,10 +1347,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_esame(IN p_id_esame integer, IN p_data date) OWNER TO postgres;
-
 --
--- Name: update_insegnamento(integer, integer, character varying, integer, character varying, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_insegnamento(integer, integer, character varying, integer, character varying, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_insegnamento(IN p_id_insegnamento integer, IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer)
@@ -1401,10 +1366,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_insegnamento(IN p_id_insegnamento integer, IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer) OWNER TO postgres;
-
 --
--- Name: update_segretario(integer, character varying, character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_segretario(integer, character varying, character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_segretario(IN p_id_segreteria integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)
@@ -1425,10 +1388,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_segretario(IN p_id_segreteria integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying) OWNER TO postgres;
-
 --
--- Name: update_studente(integer, character varying, character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_studente(integer, character varying, character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_studente(IN p_matricola integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)
@@ -1449,10 +1410,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_studente(IN p_matricola integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying) OWNER TO postgres;
-
 --
--- Name: update_user_password(integer, character varying); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_user_password(integer, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_user_password(IN p_id_utente integer, IN p_password character varying)
@@ -1466,10 +1425,8 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_user_password(IN p_id_utente integer, IN p_password character varying) OWNER TO postgres;
-
 --
--- Name: update_valutazione(integer, integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: postgres
+-- Name: update_valutazione(integer, integer, integer); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
 CREATE PROCEDURE db_esami.update_valutazione(IN p_id_esame integer, IN p_matricola integer, IN p_voto integer)
@@ -1484,14 +1441,12 @@ END;
 $$;
 
 
-ALTER PROCEDURE db_esami.update_valutazione(IN p_id_esame integer, IN p_matricola integer, IN p_voto integer) OWNER TO postgres;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: archivio_studenti; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: archivio_studenti; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.archivio_studenti (
@@ -1504,10 +1459,8 @@ CREATE TABLE db_esami.archivio_studenti (
 );
 
 
-ALTER TABLE db_esami.archivio_studenti OWNER TO postgres;
-
 --
--- Name: archivio_verbali; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: archivio_verbali; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.archivio_verbali (
@@ -1518,10 +1471,8 @@ CREATE TABLE db_esami.archivio_verbali (
 );
 
 
-ALTER TABLE db_esami.archivio_verbali OWNER TO postgres;
-
 --
--- Name: cdl; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: cdl; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.cdl (
@@ -1531,10 +1482,8 @@ CREATE TABLE db_esami.cdl (
 );
 
 
-ALTER TABLE db_esami.cdl OWNER TO postgres;
-
 --
--- Name: docenti; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: docenti; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.docenti (
@@ -1545,10 +1494,8 @@ CREATE TABLE db_esami.docenti (
 );
 
 
-ALTER TABLE db_esami.docenti OWNER TO postgres;
-
 --
--- Name: docenti_id_docente_seq; Type: SEQUENCE; Schema: db_esami; Owner: postgres
+-- Name: docenti_id_docente_seq; Type: SEQUENCE; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE db_esami.docenti ALTER COLUMN id_docente ADD GENERATED ALWAYS AS IDENTITY (
@@ -1562,7 +1509,7 @@ ALTER TABLE db_esami.docenti ALTER COLUMN id_docente ADD GENERATED ALWAYS AS IDE
 
 
 --
--- Name: utenti; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: utenti; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.utenti (
@@ -1572,10 +1519,8 @@ CREATE TABLE db_esami.utenti (
 );
 
 
-ALTER TABLE db_esami.utenti OWNER TO postgres;
-
 --
--- Name: docenti_info; Type: VIEW; Schema: db_esami; Owner: postgres
+-- Name: docenti_info; Type: VIEW; Schema: db_esami; Owner: -
 --
 
 CREATE VIEW db_esami.docenti_info AS
@@ -1589,10 +1534,8 @@ CREATE VIEW db_esami.docenti_info AS
   ORDER BY u.id_utente DESC;
 
 
-ALTER TABLE db_esami.docenti_info OWNER TO postgres;
-
 --
--- Name: esami; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: esami; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.esami (
@@ -1603,10 +1546,8 @@ CREATE TABLE db_esami.esami (
 );
 
 
-ALTER TABLE db_esami.esami OWNER TO postgres;
-
 --
--- Name: esami_id_esame_seq; Type: SEQUENCE; Schema: db_esami; Owner: postgres
+-- Name: esami_id_esame_seq; Type: SEQUENCE; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE db_esami.esami ALTER COLUMN id_esame ADD GENERATED ALWAYS AS IDENTITY (
@@ -1620,7 +1561,7 @@ ALTER TABLE db_esami.esami ALTER COLUMN id_esame ADD GENERATED ALWAYS AS IDENTIT
 
 
 --
--- Name: insegnamenti; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: insegnamenti; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.insegnamenti (
@@ -1634,10 +1575,8 @@ CREATE TABLE db_esami.insegnamenti (
 );
 
 
-ALTER TABLE db_esami.insegnamenti OWNER TO postgres;
-
 --
--- Name: esami_info; Type: VIEW; Schema: db_esami; Owner: postgres
+-- Name: esami_info; Type: VIEW; Schema: db_esami; Owner: -
 --
 
 CREATE VIEW db_esami.esami_info AS
@@ -1656,10 +1595,8 @@ CREATE VIEW db_esami.esami_info AS
      JOIN db_esami.docenti d ON ((i.id_docente = d.id_docente)));
 
 
-ALTER TABLE db_esami.esami_info OWNER TO postgres;
-
 --
--- Name: insegnamenti_id_insegnamento_seq; Type: SEQUENCE; Schema: db_esami; Owner: postgres
+-- Name: insegnamenti_id_insegnamento_seq; Type: SEQUENCE; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE db_esami.insegnamenti ALTER COLUMN id_insegnamento ADD GENERATED ALWAYS AS IDENTITY (
@@ -1673,7 +1610,7 @@ ALTER TABLE db_esami.insegnamenti ALTER COLUMN id_insegnamento ADD GENERATED ALW
 
 
 --
--- Name: insegnamenti_info; Type: VIEW; Schema: db_esami; Owner: postgres
+-- Name: insegnamenti_info; Type: VIEW; Schema: db_esami; Owner: -
 --
 
 CREATE VIEW db_esami.insegnamenti_info AS
@@ -1689,10 +1626,8 @@ CREATE VIEW db_esami.insegnamenti_info AS
      JOIN db_esami.docenti d ON ((i.id_docente = d.id_docente)));
 
 
-ALTER TABLE db_esami.insegnamenti_info OWNER TO postgres;
-
 --
--- Name: iscrizioni_esami; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: iscrizioni_esami; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.iscrizioni_esami (
@@ -1703,10 +1638,8 @@ CREATE TABLE db_esami.iscrizioni_esami (
 );
 
 
-ALTER TABLE db_esami.iscrizioni_esami OWNER TO postgres;
-
 --
--- Name: propedeutici; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: propedeutici; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.propedeutici (
@@ -1715,10 +1648,8 @@ CREATE TABLE db_esami.propedeutici (
 );
 
 
-ALTER TABLE db_esami.propedeutici OWNER TO postgres;
-
 --
--- Name: segreteria; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: segreteria; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.segreteria (
@@ -1729,10 +1660,8 @@ CREATE TABLE db_esami.segreteria (
 );
 
 
-ALTER TABLE db_esami.segreteria OWNER TO postgres;
-
 --
--- Name: segretari_info; Type: VIEW; Schema: db_esami; Owner: postgres
+-- Name: segretari_info; Type: VIEW; Schema: db_esami; Owner: -
 --
 
 CREATE VIEW db_esami.segretari_info AS
@@ -1746,10 +1675,8 @@ CREATE VIEW db_esami.segretari_info AS
   ORDER BY u.id_utente DESC;
 
 
-ALTER TABLE db_esami.segretari_info OWNER TO postgres;
-
 --
--- Name: segreteria_id_segreterial_seq; Type: SEQUENCE; Schema: db_esami; Owner: postgres
+-- Name: segreteria_id_segreterial_seq; Type: SEQUENCE; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE db_esami.segreteria ALTER COLUMN id_segreteria ADD GENERATED ALWAYS AS IDENTITY (
@@ -1763,7 +1690,7 @@ ALTER TABLE db_esami.segreteria ALTER COLUMN id_segreteria ADD GENERATED ALWAYS 
 
 
 --
--- Name: studenti; Type: TABLE; Schema: db_esami; Owner: postgres
+-- Name: studenti; Type: TABLE; Schema: db_esami; Owner: -
 --
 
 CREATE TABLE db_esami.studenti (
@@ -1775,10 +1702,8 @@ CREATE TABLE db_esami.studenti (
 );
 
 
-ALTER TABLE db_esami.studenti OWNER TO postgres;
-
 --
--- Name: studenti_info; Type: VIEW; Schema: db_esami; Owner: postgres
+-- Name: studenti_info; Type: VIEW; Schema: db_esami; Owner: -
 --
 
 CREATE VIEW db_esami.studenti_info AS
@@ -1796,10 +1721,8 @@ CREATE VIEW db_esami.studenti_info AS
   ORDER BY u.id_utente DESC;
 
 
-ALTER TABLE db_esami.studenti_info OWNER TO postgres;
-
 --
--- Name: studenti_matricola_seq; Type: SEQUENCE; Schema: db_esami; Owner: postgres
+-- Name: studenti_matricola_seq; Type: SEQUENCE; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE db_esami.studenti ALTER COLUMN matricola ADD GENERATED ALWAYS AS IDENTITY (
@@ -1813,7 +1736,7 @@ ALTER TABLE db_esami.studenti ALTER COLUMN matricola ADD GENERATED ALWAYS AS IDE
 
 
 --
--- Name: utenti_id_utente_seq; Type: SEQUENCE; Schema: db_esami; Owner: postgres
+-- Name: utenti_id_utente_seq; Type: SEQUENCE; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE db_esami.utenti ALTER COLUMN id_utente ADD GENERATED ALWAYS AS IDENTITY (
@@ -1827,7 +1750,7 @@ ALTER TABLE db_esami.utenti ALTER COLUMN id_utente ADD GENERATED ALWAYS AS IDENT
 
 
 --
--- Name: utenti_ruolo; Type: VIEW; Schema: db_esami; Owner: postgres
+-- Name: utenti_ruolo; Type: VIEW; Schema: db_esami; Owner: -
 --
 
 CREATE VIEW db_esami.utenti_ruolo AS
@@ -1859,10 +1782,8 @@ UNION
      JOIN db_esami.docenti d ON ((d.id_utente = u3.id_utente)));
 
 
-ALTER TABLE db_esami.utenti_ruolo OWNER TO postgres;
-
 --
--- Data for Name: archivio_studenti; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: archivio_studenti; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, data_archiviazione) FROM stdin;
@@ -1871,15 +1792,16 @@ COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, dat
 
 
 --
--- Data for Name: archivio_verbali; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: archivio_verbali; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.archivio_verbali (id_esame, matricola_archiviata, data_verbalizzazione, voto) FROM stdin;
+3	33	2023-09-19	19
 \.
 
 
 --
--- Data for Name: cdl; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: cdl; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.cdl (nome, tipo, id_cdl) FROM stdin;
@@ -1889,7 +1811,7 @@ Fisica	Triennale	L-30
 
 
 --
--- Data for Name: docenti; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: docenti; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
@@ -1899,22 +1821,22 @@ COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
 
 
 --
--- Data for Name: esami; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: esami; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.esami (id_esame, data, id_insegnamento, id_docente) FROM stdin;
 4	2023-09-25	4	1
 27	2023-09-27	6	6
-2	2023-09-21	2	1
 23	2023-09-24	2	1
 25	2023-09-26	1	1
 5	2023-09-23	2	1
 3	2023-09-10	1	1
+2	2023-09-11	2	1
 \.
 
 
 --
--- Data for Name: insegnamenti; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: insegnamenti; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.insegnamenti (id_insegnamento, semestre, nome, id_docente, id_cdl, anno) FROM stdin;
@@ -1926,21 +1848,19 @@ COPY db_esami.insegnamenti (id_insegnamento, semestre, nome, id_docente, id_cdl,
 
 
 --
--- Data for Name: iscrizioni_esami; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: iscrizioni_esami; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione) FROM stdin;
 1	2	19	2023-09-10
 1	5	18	2023-09-11
-1	23	13	2023-09-11
 1	3	20	2023-09-11
-33	27	\N	\N
-33	3	19	2023-09-19
+1	23	25	2023-09-12
 \.
 
 
 --
--- Data for Name: propedeutici; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: propedeutici; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
@@ -1949,26 +1869,26 @@ COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
 
 
 --
--- Data for Name: segreteria; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: segreteria; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.segreteria (id_segreteria, nome, cognome, id_utente) FROM stdin;
 1	Luigi	Pepe	6
+3	rob	pv	53
 \.
 
 
 --
--- Data for Name: studenti; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: studenti; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.studenti (matricola, nome, cognome, id_utente, id_cdl) FROM stdin;
 1	Matteo	Zaghenoooo	2	L-31
-33	studente2	cognome	52	L-31
 \.
 
 
 --
--- Data for Name: utenti; Type: TABLE DATA; Schema: db_esami; Owner: postgres
+-- Data for Name: utenti; Type: TABLE DATA; Schema: db_esami; Owner: -
 --
 
 COPY db_esami.utenti (id_utente, email, password) FROM stdin;
@@ -1976,54 +1896,54 @@ COPY db_esami.utenti (id_utente, email, password) FROM stdin;
 6	luigi.pepe@unimips.it	pass1
 51	massimo.santini@unimips.it	pass1
 7	albertonunzio.borghese@unimips.it	pass1
-52	studente2.cognome@unimips.it	123
+53	rob.pv@unimips.it	123
 \.
 
 
 --
--- Name: docenti_id_docente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: postgres
+-- Name: docenti_id_docente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
 SELECT pg_catalog.setval('db_esami.docenti_id_docente_seq', 6, true);
 
 
 --
--- Name: esami_id_esame_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: postgres
+-- Name: esami_id_esame_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
 SELECT pg_catalog.setval('db_esami.esami_id_esame_seq', 28, true);
 
 
 --
--- Name: insegnamenti_id_insegnamento_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: postgres
+-- Name: insegnamenti_id_insegnamento_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
 SELECT pg_catalog.setval('db_esami.insegnamenti_id_insegnamento_seq', 6, true);
 
 
 --
--- Name: segreteria_id_segreterial_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: postgres
+-- Name: segreteria_id_segreterial_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.segreteria_id_segreterial_seq', 2, true);
+SELECT pg_catalog.setval('db_esami.segreteria_id_segreterial_seq', 3, true);
 
 
 --
--- Name: studenti_matricola_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: postgres
+-- Name: studenti_matricola_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
 SELECT pg_catalog.setval('db_esami.studenti_matricola_seq', 33, true);
 
 
 --
--- Name: utenti_id_utente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: postgres
+-- Name: utenti_id_utente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 52, true);
+SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 53, true);
 
 
 --
--- Name: archivio_studenti archivio_studenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: archivio_studenti archivio_studenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.archivio_studenti
@@ -2031,7 +1951,7 @@ ALTER TABLE ONLY db_esami.archivio_studenti
 
 
 --
--- Name: archivio_verbali archivio_verbali_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: archivio_verbali archivio_verbali_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.archivio_verbali
@@ -2039,7 +1959,7 @@ ALTER TABLE ONLY db_esami.archivio_verbali
 
 
 --
--- Name: cdl cdl_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: cdl cdl_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.cdl
@@ -2047,7 +1967,7 @@ ALTER TABLE ONLY db_esami.cdl
 
 
 --
--- Name: docenti docenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: docenti docenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.docenti
@@ -2055,7 +1975,7 @@ ALTER TABLE ONLY db_esami.docenti
 
 
 --
--- Name: esami esami_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: esami esami_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.esami
@@ -2063,7 +1983,7 @@ ALTER TABLE ONLY db_esami.esami
 
 
 --
--- Name: insegnamenti insegnamenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: insegnamenti insegnamenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.insegnamenti
@@ -2071,7 +1991,7 @@ ALTER TABLE ONLY db_esami.insegnamenti
 
 
 --
--- Name: iscrizioni_esami iscrizioni_esami_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: iscrizioni_esami iscrizioni_esami_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.iscrizioni_esami
@@ -2079,7 +1999,7 @@ ALTER TABLE ONLY db_esami.iscrizioni_esami
 
 
 --
--- Name: propedeutici propedeutici_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: propedeutici propedeutici_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.propedeutici
@@ -2087,7 +2007,7 @@ ALTER TABLE ONLY db_esami.propedeutici
 
 
 --
--- Name: segreteria segreteria_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: segreteria segreteria_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.segreteria
@@ -2095,7 +2015,7 @@ ALTER TABLE ONLY db_esami.segreteria
 
 
 --
--- Name: studenti studenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: studenti studenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.studenti
@@ -2103,7 +2023,7 @@ ALTER TABLE ONLY db_esami.studenti
 
 
 --
--- Name: utenti utenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: utenti utenti_pk; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.utenti
@@ -2111,7 +2031,7 @@ ALTER TABLE ONLY db_esami.utenti
 
 
 --
--- Name: utenti utenti_un_email; Type: CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: utenti utenti_un_email; Type: CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.utenti
@@ -2119,49 +2039,56 @@ ALTER TABLE ONLY db_esami.utenti
 
 
 --
--- Name: segreteria delete_segretario; Type: TRIGGER; Schema: db_esami; Owner: postgres
+-- Name: studenti archivia_studente; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
-CREATE TRIGGER delete_segretario AFTER DELETE ON db_esami.segreteria FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_before();
-
-
---
--- Name: docenti delete_utente; Type: TRIGGER; Schema: db_esami; Owner: postgres
---
-
-CREATE TRIGGER delete_utente AFTER DELETE ON db_esami.docenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_before();
+CREATE TRIGGER archivia_studente BEFORE DELETE ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_archivia_studente();
 
 
 --
--- Name: studenti delete_utente; Type: TRIGGER; Schema: db_esami; Owner: postgres
+-- Name: segreteria delete_segretario; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
-CREATE TRIGGER delete_utente AFTER DELETE ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_before();
+CREATE TRIGGER delete_segretario AFTER DELETE ON db_esami.segreteria FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
 
 
 --
--- Name: insegnamenti limite_docente_insegnamenti; Type: TRIGGER; Schema: db_esami; Owner: postgres
+-- Name: docenti delete_utente; Type: TRIGGER; Schema: db_esami; Owner: -
+--
+
+CREATE TRIGGER delete_utente AFTER DELETE ON db_esami.docenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+
+
+--
+-- Name: studenti delete_utente; Type: TRIGGER; Schema: db_esami; Owner: -
+--
+
+CREATE TRIGGER delete_utente AFTER INSERT ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+
+
+--
+-- Name: insegnamenti limite_docente_insegnamenti; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
 CREATE TRIGGER limite_docente_insegnamenti BEFORE INSERT ON db_esami.insegnamenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_limite_docente_insegnamenti();
 
 
 --
--- Name: esami singolo_esame_giorno_cdl; Type: TRIGGER; Schema: db_esami; Owner: postgres
+-- Name: esami singolo_esame_giorno_cdl; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
 CREATE TRIGGER singolo_esame_giorno_cdl BEFORE INSERT ON db_esami.esami FOR EACH ROW EXECUTE FUNCTION db_esami.tr_singolo_esame_giorno_cdl();
 
 
 --
--- Name: iscrizioni_esami tr_restrizioni_iscrizione_esami; Type: TRIGGER; Schema: db_esami; Owner: postgres
+-- Name: iscrizioni_esami tr_restrizioni_iscrizione_esami; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
 CREATE TRIGGER tr_restrizioni_iscrizione_esami BEFORE INSERT ON db_esami.iscrizioni_esami FOR EACH ROW EXECUTE FUNCTION db_esami.tr_restrizioni_iscrizione_esami();
 
 
 --
--- Name: archivio_studenti archivio_studenti_cdl_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: archivio_studenti archivio_studenti_cdl_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.archivio_studenti
@@ -2169,7 +2096,7 @@ ALTER TABLE ONLY db_esami.archivio_studenti
 
 
 --
--- Name: archivio_verbali archivio_verbali_archivio_studenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: archivio_verbali archivio_verbali_archivio_studenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.archivio_verbali
@@ -2177,7 +2104,7 @@ ALTER TABLE ONLY db_esami.archivio_verbali
 
 
 --
--- Name: archivio_verbali archivio_verbali_esami_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: archivio_verbali archivio_verbali_esami_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.archivio_verbali
@@ -2185,7 +2112,7 @@ ALTER TABLE ONLY db_esami.archivio_verbali
 
 
 --
--- Name: docenti docenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: docenti docenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.docenti
@@ -2193,7 +2120,7 @@ ALTER TABLE ONLY db_esami.docenti
 
 
 --
--- Name: esami esami_docenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: esami esami_docenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.esami
@@ -2201,7 +2128,7 @@ ALTER TABLE ONLY db_esami.esami
 
 
 --
--- Name: esami esami_insegnamenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: esami esami_insegnamenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.esami
@@ -2209,7 +2136,7 @@ ALTER TABLE ONLY db_esami.esami
 
 
 --
--- Name: insegnamenti insegnamenti_cdl_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: insegnamenti insegnamenti_cdl_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.insegnamenti
@@ -2217,7 +2144,7 @@ ALTER TABLE ONLY db_esami.insegnamenti
 
 
 --
--- Name: insegnamenti insegnamenti_docenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: insegnamenti insegnamenti_docenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.insegnamenti
@@ -2225,7 +2152,7 @@ ALTER TABLE ONLY db_esami.insegnamenti
 
 
 --
--- Name: iscrizioni_esami iscrizioni_esami_esami_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: iscrizioni_esami iscrizioni_esami_esami_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.iscrizioni_esami
@@ -2233,7 +2160,7 @@ ALTER TABLE ONLY db_esami.iscrizioni_esami
 
 
 --
--- Name: iscrizioni_esami iscrizioni_esami_studenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: iscrizioni_esami iscrizioni_esami_studenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.iscrizioni_esami
@@ -2241,7 +2168,7 @@ ALTER TABLE ONLY db_esami.iscrizioni_esami
 
 
 --
--- Name: propedeutici propedeutici__insegnamenti_richiesto_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: propedeutici propedeutici__insegnamenti_richiesto_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.propedeutici
@@ -2249,7 +2176,7 @@ ALTER TABLE ONLY db_esami.propedeutici
 
 
 --
--- Name: propedeutici propedeutici_insegnamenti_esame_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: propedeutici propedeutici_insegnamenti_esame_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.propedeutici
@@ -2257,7 +2184,7 @@ ALTER TABLE ONLY db_esami.propedeutici
 
 
 --
--- Name: segreteria segreteria_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: segreteria segreteria_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.segreteria
@@ -2265,7 +2192,7 @@ ALTER TABLE ONLY db_esami.segreteria
 
 
 --
--- Name: studenti studenti_cdl_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: studenti studenti_cdl_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.studenti
@@ -2273,7 +2200,7 @@ ALTER TABLE ONLY db_esami.studenti
 
 
 --
--- Name: studenti studenti_utenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: postgres
+-- Name: studenti studenti_utenti_fk; Type: FK CONSTRAINT; Schema: db_esami; Owner: -
 --
 
 ALTER TABLE ONLY db_esami.studenti
