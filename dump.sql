@@ -78,10 +78,10 @@ $$;
 
 
 --
--- Name: add_docente(character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
+-- Name: add_docente(character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
-CREATE PROCEDURE db_esami.add_docente(IN p_nome character varying, IN p_cognome character varying)
+CREATE PROCEDURE db_esami.add_docente(IN p_nome character varying, IN p_cognome character varying, IN p_password character varying)
     LANGUAGE plpgsql
     AS $$
 
@@ -108,7 +108,7 @@ BEGIN
             raise notice 'NumOfUsers %', numberOfUsers;
         end loop;
     finalMail := concat(mailNumber, '@unimips.it');
-    insert into db_esami.utenti(email, password) values (finalMail, '123');
+    insert into db_esami.utenti(email, password) values (finalMail, p_password);
     var_id_utente = (select id_utente from db_esami.utenti where email = finalMail);
     INSERT INTO db_esami.docenti(nome, cognome, id_utente)
     VALUES (p_nome, p_cognome, var_id_utente);
@@ -163,10 +163,10 @@ $$;
 
 
 --
--- Name: add_segretario(character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
+-- Name: add_segretario(character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
-CREATE PROCEDURE db_esami.add_segretario(IN p_nome character varying, IN p_cognome character varying)
+CREATE PROCEDURE db_esami.add_segretario(IN p_nome character varying, IN p_cognome character varying, IN p_password character varying)
     LANGUAGE plpgsql
     AS $$
 
@@ -193,7 +193,7 @@ BEGIN
             raise notice 'NumOfUsers %', numberOfUsers;
         end loop;
     finalMail := concat(mailNumber, '@unimips.it');
-    insert into db_esami.utenti(email, password) values (finalMail, '123');
+    insert into db_esami.utenti(email, password) values (finalMail, p_password);
     var_id_utente = (select id_utente from db_esami.utenti where email = finalMail);
     INSERT INTO db_esami.segreteria(nome, cognome, id_utente)
     VALUES (p_nome, p_cognome, var_id_utente);
@@ -202,10 +202,10 @@ $$;
 
 
 --
--- Name: add_studente(character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
+-- Name: add_studente(character varying, character varying, character varying, character varying); Type: PROCEDURE; Schema: db_esami; Owner: -
 --
 
-CREATE PROCEDURE db_esami.add_studente(IN p_nome character varying, IN p_cognome character varying, IN p_id_cdl character varying)
+CREATE PROCEDURE db_esami.add_studente(IN p_nome character varying, IN p_cognome character varying, IN p_id_cdl character varying, IN p_password character varying)
     LANGUAGE plpgsql
     AS $$
 
@@ -232,7 +232,7 @@ BEGIN
             raise notice 'NumOfUsers %', numberOfUsers;
         end loop;
     finalMail := concat(mailNumber, '@unimips.it');
-    insert into db_esami.utenti(email, password) values (finalMail, '123');
+    insert into db_esami.utenti(email, password) values (finalMail, p_password);
     var_id_utente = (select id_utente from db_esami.utenti where email = finalMail);
     INSERT INTO db_esami.studenti(nome, cognome, id_utente, id_cdl)
     VALUES (p_nome, p_cognome, var_id_utente, p_id_cdl);
@@ -708,7 +708,7 @@ $$;
 -- Name: get_esami_not_iscritto(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
-CREATE FUNCTION db_esami.get_esami_not_iscritto(p_matricola integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_esami_not_iscritto(p_matricola integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying, propedeutici_mancanti bigint)
     LANGUAGE plpgsql
     AS $$
 declare
@@ -728,7 +728,10 @@ begin
                e.nome_insegnamento,
                e.id_cdl,
                e.nome_docente,
-               e.cognome_docente
+               e.cognome_docente,
+               (select count(*)
+                from
+                    db_esami.get_propedeutici_mancanti(e.id_insegnamento, p_matricola)) as propedeutici_mancanti
         from db_esami.esami_info e
         where e.data > CURRENT_DATE
           AND e.id_esame in ((select es.id_esame
@@ -737,7 +740,7 @@ begin
                              (select ie.id_esame
                               from db_esami.iscrizioni_esami ie
                               where ie.matricola = p_matricola))
-    order by e.data asc;
+        order by e.data asc;
 end;
 
 $$;
@@ -920,6 +923,30 @@ $$;
 
 
 --
+-- Name: get_numero_esami_mancanti(integer); Type: FUNCTION; Schema: db_esami; Owner: -
+--
+
+CREATE FUNCTION db_esami.get_numero_esami_mancanti(p_matricola integer) RETURNS TABLE(mancanti bigint)
+    LANGUAGE plpgsql
+    AS $$
+declare
+    var_id_cdl         varchar;
+    var_esami_carriera bigint;
+    var_esami_cdl      bigint;
+begin
+    select s.id_cdl
+    into var_id_cdl
+    from db_esami.studenti s
+    where s.matricola = p_matricola;
+    select count(*) into var_esami_carriera from db_esami.get_carriera_valida(p_matricola);
+    select count(*) into var_esami_cdl from db_esami.get_insegnamenti_by_cdl(var_id_cdl);
+    return query select (var_esami_cdl - var_esami_carriera) ;
+end;
+
+$$;
+
+
+--
 -- Name: get_propedeutici_by_id_insegnamento(integer); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
@@ -974,7 +1001,7 @@ begin
     return query
         select i.id_insegnamento, i.nome as nome_insegnamento
         from db_esami.insegnamenti i
-                 left join get_propedeutici_by_id_insegnamento(p_id_insegnamento) p
+                 left join db_esami.get_propedeutici_by_id_insegnamento(p_id_insegnamento) p
                            on i.id_insegnamento = p.id_richiesto
         where i.id_cdl = p_id_cdl AND p.id_richiesto is null and i.id_insegnamento != p_id_insegnamento
         order by i.anno, i.semestre asc;
@@ -1187,7 +1214,7 @@ BEGIN
 
     insert into db_esami.archivio_studenti(matricola, nome, cognome, id_cdl, laureato, data_archiviazione)
     select s.matricola, s.nome, s.cognome, s.id_cdl, var_laureato, current_date
-         from studenti s
+         from db_esami.studenti s
          where s.matricola = OLD.matricola;
 
     insert into db_esami.archivio_verbali(id_esame, matricola_archiviata, data_verbalizzazione, voto)
@@ -1788,6 +1815,7 @@ UNION
 
 COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, data_archiviazione) FROM stdin;
 33	L-31	studente2	cognome	f	2023-09-19
+34	L-30	StudenteNome	StudCognome	f	2023-09-20
 \.
 
 
@@ -1817,6 +1845,7 @@ Fisica	Triennale	L-30
 COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
 1	Alberto Nunzio	Borghese	7
 6	Massimo	Santini	51
+7	DocenteNome	DocCognome	55
 \.
 
 
@@ -1825,13 +1854,13 @@ COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
 --
 
 COPY db_esami.esami (id_esame, data, id_insegnamento, id_docente) FROM stdin;
-4	2023-09-25	4	1
 27	2023-09-27	6	6
 23	2023-09-24	2	1
 25	2023-09-26	1	1
 5	2023-09-23	2	1
 3	2023-09-10	1	1
 2	2023-09-11	2	1
+4	2023-09-13	4	1
 \.
 
 
@@ -1852,10 +1881,7 @@ COPY db_esami.insegnamenti (id_insegnamento, semestre, nome, id_docente, id_cdl,
 --
 
 COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione) FROM stdin;
-1	2	19	2023-09-10
-1	5	18	2023-09-11
-1	3	20	2023-09-11
-1	23	25	2023-09-12
+35	4	28	2023-09-20
 \.
 
 
@@ -1865,6 +1891,7 @@ COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione)
 
 COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
 2	1
+2	6
 \.
 
 
@@ -1873,8 +1900,9 @@ COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
 --
 
 COPY db_esami.segreteria (id_segreteria, nome, cognome, id_utente) FROM stdin;
-1	Luigi	Pepe	6
 3	rob	pv	53
+4	SegretarioNome	SegCognome	56
+1	Luigi	Pepe	6
 \.
 
 
@@ -1884,6 +1912,7 @@ COPY db_esami.segreteria (id_segreteria, nome, cognome, id_utente) FROM stdin;
 
 COPY db_esami.studenti (matricola, nome, cognome, id_utente, id_cdl) FROM stdin;
 1	Matteo	Zaghenoooo	2	L-31
+35	Studente	Fisico	57	L-30
 \.
 
 
@@ -1892,11 +1921,15 @@ COPY db_esami.studenti (matricola, nome, cognome, id_utente, id_cdl) FROM stdin;
 --
 
 COPY db_esami.utenti (id_utente, email, password) FROM stdin;
-2	matteo.zagheno@unimips.it	pass1
-6	luigi.pepe@unimips.it	pass1
-51	massimo.santini@unimips.it	pass1
-7	albertonunzio.borghese@unimips.it	pass1
-53	rob.pv@unimips.it	123
+6	luigi.pepe@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+7	albertonunzio.borghese@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+53	rob.pv@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+55	docentenome.doccognome@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+51	massimo.santini@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+2	matteo.zagheno@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+56	segretarionome.segcognome@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+54	studentenome.studcognome@unimips.it	$2y$10$vNaqwIAC/Thf4Q4crvIP7eaLdTm6kiihRcUv8DpDLmWdmxrHdNevy
+57	studente.fisico@unimips.it	$2y$10$e/9WAWhBcDSSsJQ5NSKXMORFfQus8wzZm7bUQrUfoPk85vUe6sc1K
 \.
 
 
@@ -1904,7 +1937,7 @@ COPY db_esami.utenti (id_utente, email, password) FROM stdin;
 -- Name: docenti_id_docente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.docenti_id_docente_seq', 6, true);
+SELECT pg_catalog.setval('db_esami.docenti_id_docente_seq', 7, true);
 
 
 --
@@ -1925,21 +1958,21 @@ SELECT pg_catalog.setval('db_esami.insegnamenti_id_insegnamento_seq', 6, true);
 -- Name: segreteria_id_segreterial_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.segreteria_id_segreterial_seq', 3, true);
+SELECT pg_catalog.setval('db_esami.segreteria_id_segreterial_seq', 4, true);
 
 
 --
 -- Name: studenti_matricola_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.studenti_matricola_seq', 33, true);
+SELECT pg_catalog.setval('db_esami.studenti_matricola_seq', 35, true);
 
 
 --
 -- Name: utenti_id_utente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 53, true);
+SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 57, true);
 
 
 --

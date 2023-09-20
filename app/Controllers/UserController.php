@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Repositories\EsamiData;
+use App\Repositories\StudentiData;
 use App\Repositories\UsersData;
 
 
@@ -13,7 +15,7 @@ class UserController extends BaseController
         $user = session()->get('user');
         return view('templates/header', ['title' => 'Profilo']) .
             view('profile', ['user' => $user]) .
-            ($user->ruolo === 'studente' ? "<br><a class='w-10 btn btn-danger btn-lg' href='/studenti/rinuncia'>Rinuncia agli studi</a>" : "") .
+            ($user->ruolo === 'studente' && StudentiData::getNumeroEsamiMancanti(session()->get('studente')->matricola) !== 0 ? "<br><a class='w-10 btn btn-danger btn-lg' href='/studenti/rinuncia'>Rinuncia agli studi</a>" : "") .
             view('templates/footer');
     }
 

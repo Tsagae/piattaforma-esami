@@ -103,5 +103,19 @@ class StudentiData
         return null;
     }
 
+    public static function getNumeroEsamiMancanti(int $matricola): ?int
+    {
+        $conn = PostgresConnection::get();
+        try {
+            $res = $conn->selectProcedure("db_esami.get_numero_esami_mancanti", $matricola);
+            if (count($res) === 0) {
+                return null;
+            }
+            return $res[0]->mancanti;
+        } catch (Exception $e) {
+            error_log($e);
+        }
+        return null;
+    }
 
 }

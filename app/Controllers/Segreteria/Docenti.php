@@ -49,7 +49,7 @@ class Docenti extends BaseController
         }
 
         $error = "";
-        $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
+        $post['password'] = password_hash(HelperData::defaultUserPassword(), PASSWORD_DEFAULT);
         DocentiData::addDocente((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
