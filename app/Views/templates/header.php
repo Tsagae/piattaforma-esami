@@ -1,7 +1,7 @@
 <?php
 function navBar(?object $user): string
 {
-    $barEnding = '<a class="navbar-brand" href="/logout">Logout</a>';
+    $barEnding = '<a class="navbar-brand" href="/profilo">Profilo</a><a class="navbar-brand" href="/logout">Logout</a>';
     $innerBar = "";
     switch ($user->ruolo ?? null) {
         case "segreteria":

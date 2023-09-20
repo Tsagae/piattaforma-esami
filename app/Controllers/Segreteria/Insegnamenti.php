@@ -31,12 +31,12 @@ class Insegnamenti extends BaseController
             $item->head = $insegnamento->id_insegnamento . " " . $insegnamento->nome;
             $item->body = ["$insegnamento->semestre Semestre", "$insegnamento->docente_nome $insegnamento->docente_cognome"];
             $item->buttons = [
-                (object) [
+                (object)[
                     "link" => "/segreteria/insegnamenti/edit?id=$insegnamento->id_insegnamento",
                     "style" => "btn btn-primary m-1",
                     "text" => "Modifica"
                 ],
-                (object) [
+                (object)[
                     "link" => "/segreteria/insegnamenti/delete?id=$insegnamento->id_insegnamento",
                     "style" => "btn btn-danger m-1",
                     "text" => "Elimina"
@@ -87,7 +87,7 @@ class Insegnamenti extends BaseController
         }
 
         $error = "";
-        InsegnamentiData::addInsegnamento((object) $post, $error);
+        InsegnamentiData::addInsegnamento((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
@@ -158,7 +158,7 @@ class Insegnamenti extends BaseController
         error_log("prop: " . var_export($post['propedeuticita[]'], true));
 
         $error = "";
-        InsegnamentiData::updateInsegnamento((object) $post, $error);
+        InsegnamentiData::updateInsegnamento((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
@@ -274,7 +274,7 @@ class Insegnamenti extends BaseController
                     'submitValue' => "$id_richiesto",
                     'text' => "Cacellazione propedeutico $richiesto->nome da $insegnamento->nome",
                     'confirmText' => 'Rimuovi',
-                    'cancelRedirect' => "segreteria/insegnamenti/edit?id=$id_insegnamento",
+                    'cancelRedirect' => "/segreteria/insegnamenti/edit?id=$id_insegnamento",
                     'cancelText' => 'Annulla'
                 ])
                 . view('templates/footer');

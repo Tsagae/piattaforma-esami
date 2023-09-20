@@ -13,7 +13,6 @@ class Segretari extends BaseController
     public function listSegretari()
     {
         $data['segretari'] = SegretariData::getSegretari();
-        error_log(var_export($data['segretari'], true));
         return view('templates/header', ['title' => 'Segreteria'])
             . view("segreteria/segretari/listsegretari", $data)
             . view('templates/footer');
@@ -30,7 +29,6 @@ class Segretari extends BaseController
         }
 
         $post = $this->request->getPost(['nome', 'cognome']);
-        //error_log(var_export($post, true));
         // Checks whether the submitted data passed the validation rules.
         if (!$this->validateData($post, [
             'nome' => 'required|max_length[255]|min_length[2]', //TODO add more validation
@@ -97,6 +95,7 @@ class Segretari extends BaseController
         if (!$this->request->is('post')) {
             $segretario = SegretariData::getSegretario($this->request->getGet('id'));
             $data['segretario'] = $segretario;
+            error_log("segretario: " . var_export($segretario, true));
             return view('templates/header', ['title' => 'Segreteria'])
                 . view('segreteria/segretari/edit', $data)
                 . view('templates/footer');
@@ -116,9 +115,9 @@ class Segretari extends BaseController
                 . view('templates/footer');
         }
         $error = "";
-        if(empty($post['password'])){
+        if (empty($post['password'])) {
             SegretariData::updateSegretarioNoPassword((object)$post, $error);
-        }else{
+        } else {
             SegretariData::updateSegretario((object)$post, $error);
         }
         if (!empty($error)) {

@@ -2,12 +2,12 @@
 <?= csrf_field() ?>
 <?php
 $formValues = [];
-if (isset($cdl)) {
+if (isset($segretario)) {
     $formValues = [
-        'id_segreteria' => esc($cdl->id_segreteria),
-        'nome' => esc($cdl->nome),
-        'cognome' => esc($cdl->cognome),
-        'email' => esc($cdl->email),
+        'id_segreteria' => esc($segretario->id_segreteria),
+        'nome' => esc($segretario->nome),
+        'cognome' => esc($segretario->cognome),
+        'email' => esc($segretario->email),
     ];
 } else {
     $formValues = [
