@@ -20,7 +20,7 @@ class DocentiData
         //error_log(var_export($studente, true));
         $conn = PostgresConnection::get();
         try {
-            $conn->callProcedure("db_esami.add_docente", $docente->nome, $docente->cognome);
+            $conn->callProcedure("db_esami.add_docente", $docente->nome, $docente->cognome, $docente->password);
         } catch (Exception $e) {
             error_log($e);
             $error = "Errore nell'inserimento dei dati";

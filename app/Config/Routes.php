@@ -14,6 +14,7 @@ use App\Controllers\Segreteria\Segretari;
 use App\Controllers\Segreteria\Studenti;
 use App\Controllers\Segreteria\Utenti;
 use App\Controllers\Segreteria\Insegnamenti;
+use App\Controllers\Studenti\Index;
 
 $routes = Services::routes();
 
@@ -45,6 +46,7 @@ $routes->get('/', 'Home::index');
 $routes->get('logout', [LoginController::class, 'logout']);
 $routes->match(['get', 'post'], 'secondtest/create', [SecondController::class, 'create']);
 $routes->match(['get', 'post'], 'login', [LoginController::class, 'login']);
+$routes->get( '/unauthorized', [LoginController::class, 'unauthorized']);
 
 //Profilo
 $routes->get('/profilo', [\App\Controllers\UserController::class, 'profileGet']);
@@ -118,6 +120,8 @@ $routes->match(['get', 'post'], '/studenti/esami/cancella', [\App\Controllers\St
 //Studenti/Carriera
 $routes->get('/studenti/carriera', [\App\Controllers\Studenti\Carriera::class, 'listCarriera']);
 $routes->get('/studenti/carrieravalida', [\App\Controllers\Studenti\Carriera::class, 'listCarrieraValida']);
+//Studenti/Rinuncia
+$routes->match(['get', 'post'], '/studenti/rinuncia', [Index::class, 'rinuncia']);
 
 
 

@@ -5,8 +5,10 @@ namespace App\Controllers\Segreteria;
 
 use App\Controllers\BaseController;
 use App\Repositories\CdlData;
+use App\Repositories\HelperData;
 use App\Repositories\StudentiData;
 use Exception;
+use Faker\Extension\Helper;
 
 class Studenti extends BaseController
 {
@@ -45,6 +47,7 @@ class Studenti extends BaseController
         }
 
         $error = "";
+        $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
         StudentiData::addStudente((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
@@ -105,7 +108,7 @@ class Studenti extends BaseController
                 . view('templates/footer');
         }
 
-        $post = $this->request->getPost(['matricola','nome', 'cognome', 'email', 'password']);
+        $post = $this->request->getPost(['matricola', 'nome', 'cognome', 'email', 'password']);
         //error_log(var_export($post, true));
         // Checks whether the submitted data passed the validation rules.
         if (!$this->validateData($post, [
@@ -119,9 +122,10 @@ class Studenti extends BaseController
                 . view('templates/footer');
         }
         $error = "";
-        if(empty($post['password'])){
+        if (empty($post['password'])) {
             StudentiData::updateStudenteNoPassword((object)$post, $error);
-        }else{
+        } else {
+            $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
             StudentiData::updateStudente((object)$post, $error);
         }
         if (!empty($error)) {

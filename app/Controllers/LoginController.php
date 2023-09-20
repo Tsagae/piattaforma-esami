@@ -13,7 +13,8 @@ class LoginController extends BaseController
     public function login()
     {
         if (session()->get('user') !== null) {
-            return redirect()->to(site_url('/'));
+            $redirect = $this->redirectUserByRole(session()->get('user')->ruolo);
+            if ($redirect !== null) return $redirect;
         }
 
         helper('form');
@@ -51,44 +52,53 @@ class LoginController extends BaseController
                 . view('login', $data)
                 . view('templates/footer');
         }
-
-        if ($user->password !== $post['password']) { //TODO missing hashing
-            $data['userError'] = "incorrect password";
+        if (!password_verify($post['password'], $user->password)) {
+            $data['userError'] = "utente non esistente o password errata";
             return view('templates/header', ['title' => 'Login'])
                 . view('login', $data)
                 . view('templates/footer');
-        } else {
-            unset($user->password);
-            $session = session();
-            $session->set("user", $user);
-            $error = "";
-            $usersInfo = $this::addUsersInfo($user, $error);
-            error_log("userInfo: " . var_export($usersInfo, true));
-            error_log("error: " . $error);
-            $session->set("$user->ruolo", $usersInfo);
-            switch ($user->ruolo) {
-                case "studente":
-                    return redirect()->to(site_url('/studenti'));
-                case "docente":
-                    return redirect()->to(site_url('/docenti'));
-                case "segreteria":
-                    return redirect()->to(site_url('/segreteria'));
-                default:
-                    break;
-            }
         }
-        /*
-            return view('templates/header', ['title' => 'Login'])
-                . view('success')
-                . view('templates/footer');
-        */
-        return redirect()->to(site_url('/'));
+        //successful login
+        unset($user->password);
+        $session = session();
+        $session->set("user", $user);
+        $error = "";
+        $usersInfo = $this::addUsersInfo($user, $error);
+        $session->set("$user->ruolo", $usersInfo);
+        $redirect = $this->redirectUserByRole($user->ruolo);
+        if ($redirect !== null) return $redirect;
+        $data['userError'] = "utente non esistente o password errata";
+        return view('templates/header', ['title' => 'Login'])
+            . view('login', ['userError' => ''])
+            . view('templates/footer');
+    }
+
+    private function redirectUserByRole($role): ?\CodeIgniter\HTTP\RedirectResponse
+    {
+        switch ($role) {
+            case "studente":
+                return redirect()->to(site_url('/studenti'));
+            case "docente":
+                return redirect()->to(site_url('/docenti'));
+            case "segreteria":
+                return redirect()->to(site_url('/segreteria'));
+            default:
+                break;
+        }
+        return null;
     }
 
     public function logout()
     {
         session()->destroy();
         return redirect()->to(site_url('/'));
+    }
+
+    public function unauthorized()
+    {
+        return view('templates/header', ['title' => 'Unauthorized'])
+            . view('unauthorized')
+            . view('templates/footer');
     }
 
     private static function addUsersInfo(object $user, string &$error): ?object

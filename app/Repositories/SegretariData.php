@@ -18,7 +18,7 @@ class SegretariData
         //error_log(var_export($studente, true));
         $conn = PostgresConnection::get();
         try {
-            $conn->callProcedure("db_esami.add_segretario", $segretario->nome, $segretario->cognome);
+            $conn->callProcedure("db_esami.add_segretario", $segretario->nome, $segretario->cognome, $segretario->password);
         } catch (Exception $e) {
             error_log($e);
             $error = "Errore nell'inserimento dei dati";

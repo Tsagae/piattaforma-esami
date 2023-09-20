@@ -9,6 +9,7 @@ use App\Repositories\DocentiData;
 use App\Repositories\EsamiData;
 use App\Repositories\InsegnamentiData;
 use App\Repositories\SegretariData;
+use App\Repositories\StudentiData;
 use Exception;
 
 class Index extends BaseController
@@ -47,6 +48,7 @@ class Index extends BaseController
     public function cdlList(): string
     {
         $error = "";
+        $propedeutici = [];
         $get_cdl = $this->request->getGet('idcdl');
         $id_cdl = empty($get_cdl) ? session()->get('studente')->id_cdl : $get_cdl;
         $allCdl = CdlData::getAllCdl();
@@ -62,30 +64,80 @@ class Index extends BaseController
             }
         }
 
-        $data['insegnamenti'] = InsegnamentiData::get_insegnamenti_by_cdl($id_cdl, $error);
+        //Insegnamenti
+        $insegnamenti = InsegnamentiData::get_insegnamenti_by_cdl($id_cdl, $error);
         if (!empty($error)) {
             return view('templates/header', ['title' => 'Studenti'])
                 . "$error"
                 . view('templates/footer');
         }
-        $items = [];
-        foreach ($data['insegnamenti'] as $insegnamento) {
+        $insegnamentiItems = [];
+        foreach ($insegnamenti as $insegnamento) {
             $item = new \stdClass();
+            $tempPropedeutici = InsegnamentiData::getPropedeuticiByIdInsegnamento($insegnamento->id_insegnamento, $error);
+            if (count($tempPropedeutici) > 0) {
+                $propedeutici[] = (object)['insegnamento' => $insegnamento->nome, 'propedeutici' => $tempPropedeutici];
+            }
             $item->head = $insegnamento->nome;
             $item->body = ["Anno: $insegnamento->anno ", "Semestre: $insegnamento->semestre", "Docente: $insegnamento->docente_nome $insegnamento->docente_cognome"];
             $item->buttons = [];
-            $items[] = $item;
+            $insegnamentiItems[] = $item;
+
         }
 
-        $data['items'] = $items;
         $id_cdl = esc($id_cdl);
-        $data['noRecordsText'] = "Nessun insegnamento presente per il corso di laurea $id_cdl";
+
+        //Propedeuticità
+        $propedeuticiItems = [];
+        foreach ($propedeutici as $propedeutico) {
+            $item = new \stdClass();
+            $item->head = $propedeutico->insegnamento;
+            $item->body = ["Propedeutici: "];
+            foreach ($propedeutico->propedeutici as $richiesto) {
+                $item->body[] = "$richiesto->nome_insegnamento";
+            }
+            $item->buttons = [];
+            $propedeuticiItems[] = $item;
+        }
+
+
         return view('templates/header', ['title' => 'Studenti'])
             . "<h1>Insegnamenti $id_cdl</h1>"
             . view("templates/selection", ['options' => $options, 'firstOption' => $firstOption])
-            . view("templates/list", $data)
+            . view("templates/list", ['items' => $insegnamentiItems, 'noRecordsText' => "Nessun insegnamento presente per il corso di laurea $id_cdl"])
+            . "<h1>Propedeuticità</h1>"
+            . view("templates/list", ['items' => $propedeuticiItems, 'noRecordsText' => "Nessuna propedeutiicità presente per il corso di laurea $id_cdl"])
             . view('templates/footer');
 
+    }
+
+    public function rinuncia()
+    {
+        $studente = session()->get("studente");
+        if (!$this->request->is('post')) {
+            return view('templates/header', ['title' => 'Studenti'])
+                . view('templates/confirmation', [
+                    'submitValue' => "$studente->matricola",
+                    'text' => "Sciuro di voler rinunciare agli studi?",
+                    'confirmText' => 'Conferma',
+                    'cancelRedirect' => '/profilo',
+                    'cancelText' => 'Annulla'
+                ])
+                . view('templates/footer');
+        }
+
+        $post = $this->request->getPost(['submitValue']);
+
+        $error = "";
+        StudentiData::deleteStudente($post['submitValue'], $error);
+        if (!empty($error)) {
+            return view('templates/header', ['title' => 'Studente'])
+                . esc($error)
+                . view('templates/footer');
+        }
+        return view('templates/header', ['title' => 'Studente'])
+            . '<h3>Rinuncia agli studi effettuata con successo</h3>'
+            . view('templates/footer');
     }
 
 }

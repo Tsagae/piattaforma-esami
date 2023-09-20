@@ -6,6 +6,7 @@ namespace App\Controllers\Segreteria;
 use App\Controllers\BaseController;
 use App\Repositories\CdlData;
 use App\Repositories\DocentiData;
+use App\Repositories\HelperData;
 use App\Repositories\SegretariData;
 use Exception;
 
@@ -48,7 +49,8 @@ class Docenti extends BaseController
         }
 
         $error = "";
-        DocentiData::addDocente((object) $post, $error);
+        $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
+        DocentiData::addDocente((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
@@ -126,9 +128,10 @@ class Docenti extends BaseController
         }
         $error = "";
         if (empty($post['password'])) {
-            DocentiData::updateDocenteNoPassword((object) $post, $error);
+            DocentiData::updateDocenteNoPassword((object)$post, $error);
         } else {
-            DocentiData::updateDocente((object) $post, $error);
+            $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
+            DocentiData::updateDocente((object)$post, $error);
         }
         if (!empty($error)) {
             error_log("error");

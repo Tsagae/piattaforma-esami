@@ -13,4 +13,9 @@ class HelperData
         $conn = PostgresConnection::get();
         return $conn->executeQuery("select current_date")[0]->current_date;
     }
+
+    public static function defaultUserPassword(): string
+    {
+        return "password";
+    }
 }

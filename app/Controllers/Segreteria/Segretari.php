@@ -5,8 +5,10 @@ namespace App\Controllers\Segreteria;
 
 use App\Controllers\BaseController;
 use App\Repositories\CdlData;
+use App\Repositories\HelperData;
 use App\Repositories\SegretariData;
 use Exception;
+use Faker\Extension\Helper;
 
 class Segretari extends BaseController
 {
@@ -41,6 +43,7 @@ class Segretari extends BaseController
         }
 
         $error = "";
+        $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
         SegretariData::addSegretario((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
@@ -118,6 +121,7 @@ class Segretari extends BaseController
         if (empty($post['password'])) {
             SegretariData::updateSegretarioNoPassword((object)$post, $error);
         } else {
+            $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
             SegretariData::updateSegretario((object)$post, $error);
         }
         if (!empty($error)) {

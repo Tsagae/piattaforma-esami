@@ -13,6 +13,7 @@ class UserController extends BaseController
         $user = session()->get('user');
         return view('templates/header', ['title' => 'Profilo']) .
             view('profile', ['user' => $user]) .
+            ($user->ruolo === 'studente' ? "<br><a class='w-10 btn btn-danger btn-lg' href='/studenti/rinuncia'>Rinuncia agli studi</a>" : "") .
             view('templates/footer');
     }
 
@@ -42,6 +43,7 @@ class UserController extends BaseController
                 view('templates/footer');
 
         } else {
+            $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
             UsersData::updateUserPassword($user->id_utente, $post['password'], $error);
         }
         if (!empty($error)) {
