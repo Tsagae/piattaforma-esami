@@ -28,10 +28,11 @@ class GestioneEsami extends BaseController
             $item = new \stdClass();
             $item->head = $esame->id_esame . " " . $esame->nome_insegnamento;
             $item->body = ["$esame->data $esame->nome_docente $esame->cognome_docente"];
+            $disabledBtn = $esame->propedeutici_mancanti != 0 ? " disabled" : "";
             $item->buttons = [
-                (object) [
+                (object)[
                     "link" => "/studenti/esami/iscriviti?id=$esame->id_esame",
-                    "style" => "btn btn-primary m-1",
+                    "style" => "btn btn-primary m-1" . $disabledBtn,
                     "text" => "Iscriviti"
                 ],
             ];
@@ -64,7 +65,7 @@ class GestioneEsami extends BaseController
             $item->buttons = [];
             if ($esame->data > HelperData::getTodayDate()) {
                 $item->buttons = [
-                    (object) [
+                    (object)[
                         "link" => "/studenti/esami/cancella?id=$esame->id_esame",
                         "style" => "btn btn-danger m-1",
                         "text" => "Cancella Iscrizione"
@@ -89,7 +90,7 @@ class GestioneEsami extends BaseController
         if (!$this->request->is('post')) {
             $esame = EsamiData::getEsame($this->request->getGet('id'), $error);
 
-            return view('templates/header', ['title' => 'Studebnti'])
+            return view('templates/header', ['title' => 'Studenti'])
                 . view('templates/confirmation', [
                     'submitValue' => "$esame->id_esame",
                     'text' => "Iscriviti $esame->nome_insegnamento $esame->nome_docente $esame->cognome_docente $esame->id_cdl $esame->data",
