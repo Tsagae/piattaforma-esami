@@ -9,6 +9,7 @@ database.default.password = [postgres password]
 ```
 
 composer install
+
 php ./spark serve
 
 ## Server Requirements
