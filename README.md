@@ -1,3 +1,16 @@
+## Requisiti
+
+### PHP
+PHP 8 o superiore con le seguenti estensioni:
+
+- [intl](http://php.net/manual/en/intl.requirements.php)
+- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+- json (enabled by default - don't turn it off)
+- pgsql
+
+### Composer 
+https://getcomposer.org/doc/00-intro.md
+
 ## Setup
 
 creare una copia del file env con nome .env con la seguente configurazione:
@@ -12,14 +25,3 @@ composer install
 
 php ./spark serve
 
-## Server Requirements
-
-PHP version 8 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- pgsql
