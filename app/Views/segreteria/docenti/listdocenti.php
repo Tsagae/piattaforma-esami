@@ -7,7 +7,7 @@
         <div class="card mb-3"">
         <div class="card-header">
             <p>
-                <?= esc($docente->id_docente) ?> <?= esc($docente->nome) ?> <?= esc($docente->cognome) ?> <?= esc($docente->email) ?>
+                <?= esc($docente->nome) ?> <?= esc($docente->cognome) ?> <?= esc($docente->email) ?>
             </p>
         </div>
         <div class="card-body d-flex flex-row justify-content-center align-items-center">

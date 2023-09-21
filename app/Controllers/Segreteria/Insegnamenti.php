@@ -5,6 +5,7 @@ namespace App\Controllers\Segreteria;
 
 use App\Controllers\BaseController;
 use App\Repositories\DocentiData;
+use App\Repositories\HelperData;
 use App\Repositories\InsegnamentiData;
 use App\Repositories\CdlData;
 use Exception;
@@ -29,8 +30,8 @@ class Insegnamenti extends BaseController
         $items = [];
         foreach ($data['insegnamenti'] as $insegnamento) {
             $item = new \stdClass();
-            $item->head = $insegnamento->id_insegnamento . " " . $insegnamento->nome;
-            $item->body = ["$insegnamento->semestre Semestre", "$insegnamento->docente_nome $insegnamento->docente_cognome"];
+            $item->head = $insegnamento->nome . " Anno: $insegnamento->anno";
+            $item->body = ["Semestre: $insegnamento->semestre", "$insegnamento->docente_nome $insegnamento->docente_cognome"];
             $item->buttons = [
                 (object)[
                     "link" => "/segreteria/insegnamenti/edit?id=$insegnamento->id_insegnamento",
@@ -98,6 +99,7 @@ class Insegnamenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Insegnamento inserito correttamente</h1>'
+            . view('templates/redirect', ['url' => '/segreteria/insegnamenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -169,14 +171,21 @@ class Insegnamenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Insegnamento modificato correttamente</h1>'
+            . view('templates/redirect', ['url' => '/segreteria/insegnamenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
 
     public function delete()
     {
+        $error = "";
         if (!$this->request->is('post')) {
-            $insegnamento = InsegnamentiData::getInsegnamento($this->request->getGet('id'));
+            $insegnamento = InsegnamentiData::getInsegnamento($this->request->getGet('id'), $error);
+            if (!empty($error)) {
+                return view('templates/header', ['title' => 'Segreteria'])
+                    . esc($error)
+                    . view('templates/footer');
+            }
 
             return view('templates/header', ['title' => 'Segreteria'])
                 . view('templates/confirmation', [
@@ -203,6 +212,7 @@ class Insegnamenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h3>Insegnamento rimosso correttamente</h3>'
+            . view('templates/redirect', ['url' => '/segreteria/insegnamenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -247,7 +257,7 @@ class Insegnamenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Propedeuticità aggiunta correttamente</h1>'
-            . view('templates/redirect', ['url' => "/segreteria/insegnamenti/edit?id=$id_insegnamento", 'delay' => 3])
+            . view('templates/redirect', ['url' => "/segreteria/insegnamenti/edit?id=$id_insegnamento", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -291,8 +301,8 @@ class Insegnamenti extends BaseController
                 . view('templates/footer');
         }
         return view('templates/header', ['title' => 'Segreteria'])
-            . '<h3>Insegnamento rimosso correttamente</h3>'
-            . view('templates/redirect', ['url' => "/segreteria/insegnamenti/edit?id=$id_insegnamento", 'delay' => 3])
+            . '<h3>Propedeuticità rimossa correttamente</h3>'
+            . view('templates/redirect', ['url' => "/segreteria/insegnamenti/edit?id=$id_insegnamento", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 

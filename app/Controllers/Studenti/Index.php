@@ -7,6 +7,7 @@ use App\Controllers\BaseController;
 use App\Repositories\CdlData;
 use App\Repositories\DocentiData;
 use App\Repositories\EsamiData;
+use App\Repositories\HelperData;
 use App\Repositories\InsegnamentiData;
 use App\Repositories\SegretariData;
 use App\Repositories\StudentiData;
@@ -135,8 +136,10 @@ class Index extends BaseController
                 . esc($error)
                 . view('templates/footer');
         }
+        session()->destroy();
         return view('templates/header', ['title' => 'Studente'])
             . '<h3>Rinuncia agli studi effettuata con successo</h3>'
+            . view('templates/redirect', ['url' => "/", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 

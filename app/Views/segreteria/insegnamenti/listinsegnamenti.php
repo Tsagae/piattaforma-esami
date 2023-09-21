@@ -5,8 +5,8 @@
     <div class="row g-3 mb-3">
         <label for="id_cdl" class="form-label">Corsi di laurea</label>
         <select onchange="this.form.submit()"
-            class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
-            data-bs-theme="light" name="id_cdl" required="" value="<?= set_value('id_cdl') ?>">
+                class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
+                data-bs-theme="light" name="id_cdl" required="" value="<?= set_value('id_cdl') ?>">
             <option value="">
                 <?php if (!empty(set_value('id_cdl'))): ?>
                     <?= esc(set_value('id_cdl')) ?>
@@ -15,7 +15,7 @@
                 <?php endif ?>
             </option>
             <?php foreach ($allCdl as $cdl): ?>
-                <option value="<?= esc($cdl->id_cdl) ?>"><?= esc($cdl->id_cdl) ?>     <?= esc($cdl->nome) ?></option>
+                <option value="<?= esc($cdl->id_cdl) ?>"><?= esc($cdl->id_cdl) ?>  <?= esc($cdl->nome) ?></option>
             <?php endforeach ?>
         </select>
     </div>

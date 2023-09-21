@@ -17,6 +17,7 @@ if (isset($insegnamento)) {
         'id_cdl' => esc(set_value('id_cdl')),
         'id_docente' => esc(set_value('id_docente')),
         'anno' => esc(set_value('anno')),
+        'id_insegnamento' => esc(set_value('id_insegnamento'))
     ];
 } ?>
 <div class="col-md-7 col-lg-8">

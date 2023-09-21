@@ -6,6 +6,7 @@ namespace App\Controllers\Segreteria;
 use App\Controllers\BaseController;
 use App\Repositories\CdlData;
 use App\Repositories\DocentiData;
+use App\Repositories\HelperData;
 use App\Repositories\SegretariData;
 use Exception;
 
@@ -53,6 +54,7 @@ class Cdl extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Cdl aggiunto correttamente</h1>'
+            . view('templates/redirect', ['url' => '/segreteria/cdl', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -85,6 +87,7 @@ class Cdl extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h3>Corso di laurea rimosso correttamente</h3>'
+            . view('templates/redirect', ['url' => '/segreteria/cdl', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -124,6 +127,7 @@ class Cdl extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Dati aggiornati correttamente</h1>'
+            . view('templates/redirect', ['url' => '/segreteria/cdl', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 

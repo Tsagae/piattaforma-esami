@@ -8,7 +8,6 @@ use App\Repositories\CdlData;
 use App\Repositories\HelperData;
 use App\Repositories\StudentiData;
 use Exception;
-use Faker\Extension\Helper;
 
 class Studenti extends BaseController
 {
@@ -58,6 +57,7 @@ class Studenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Studente inserito correttamente</h1>'
+            . view('templates/redirect', ['url' => "/segreteria/studenti", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -92,6 +92,7 @@ class Studenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h3>Studente rimosso correttamente</h3>'
+            . view('templates/redirect', ['url' => "/segreteria/studenti", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -137,6 +138,7 @@ class Studenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Dati aggiornati correttamente</h1>'
+            . view('templates/redirect', ['url' => "/segreteria/studenti", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 

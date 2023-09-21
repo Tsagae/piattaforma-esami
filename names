@@ -1,0 +1,73 @@
+CREATE PROCEDURE db_esami.add_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea)
+CREATE PROCEDURE db_esami.add_docente(IN p_nome character varying, IN p_cognome character varying, IN p_password character varying)
+CREATE PROCEDURE db_esami.add_esame(IN p_data date, IN p_id_insegnamento integer, IN p_id_docente integer)
+CREATE PROCEDURE db_esami.add_insegnamento(IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer)
+CREATE PROCEDURE db_esami.add_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer)
+CREATE PROCEDURE db_esami.add_segretario(IN p_nome character varying, IN p_cognome character varying, IN p_password character varying)
+CREATE PROCEDURE db_esami.add_studente(IN p_nome character varying, IN p_cognome character varying, IN p_id_cdl character varying, IN p_password character varying)
+CREATE PROCEDURE db_esami.delete_cdl(IN p_id_cdl character varying)
+CREATE PROCEDURE db_esami.delete_docente(IN p_id_docente integer)
+CREATE PROCEDURE db_esami.delete_esame(IN p_id_esame integer)
+CREATE PROCEDURE db_esami.delete_insegnamento(IN p_id_insegnamento integer)
+CREATE PROCEDURE db_esami.delete_iscrizione_esame(IN p_matricola integer, IN p_id_esame integer)
+CREATE PROCEDURE db_esami.delete_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer)
+CREATE PROCEDURE db_esami.delete_segretario(IN p_id_segreteria integer)
+CREATE PROCEDURE db_esami.delete_studente(IN p_matricola integer)
+CREATE PROCEDURE db_esami.iscrivi_studente_a_esame(IN p_matricola integer, IN p_id_esame integer)
+CREATE PROCEDURE db_esami.update_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea)
+CREATE PROCEDURE db_esami.update_docente(IN p_id_docente integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)
+CREATE PROCEDURE db_esami.update_esame(IN p_id_esame integer, IN p_data date)
+CREATE PROCEDURE db_esami.update_insegnamento(IN p_id_insegnamento integer, IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer)
+CREATE PROCEDURE db_esami.update_segretario(IN p_id_segreteria integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)
+CREATE PROCEDURE db_esami.update_studente(IN p_matricola integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)
+CREATE PROCEDURE db_esami.update_user_password(IN p_id_utente integer, IN p_password character varying)
+CREATE PROCEDURE db_esami.update_valutazione(IN p_id_esame integer, IN p_matricola integer, IN p_voto integer)
+
+
+CREATE FUNCTION db_esami.get_all_esami_iscritto(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_all_studenti_archiviati() RETURNS TABLE(matricola integer, id_cdl character varying, nome character varying, cognome character varying, laureato boolean, nome_cdl character varying, tipo_cdl db_esami.tipo_laurea)
+CREATE FUNCTION db_esami.get_all_verbali_by_matricola_archiviata(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_carriera_valida(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_carriera_valida_archiviata(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_cdl(p_id_cdl character varying) RETURNS TABLE(id_cdl character varying, nome character varying, tipo character varying)
+CREATE FUNCTION db_esami.get_docente(p_id_docente integer) RETURNS TABLE(id_docente integer, nome character varying, cognome character varying, id_utente integer, email character varying)
+CREATE FUNCTION db_esami.get_docente_by_id_utente(p_id_utente integer) RETURNS TABLE(id_docente integer, nome character varying, cognome character varying, id_utente integer, email character varying)
+CREATE FUNCTION db_esami.get_esame(p_id_esame integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_esami_by_cdl(p_id_cdl character varying) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_esami_by_id_docente(p_id_docente integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome character varying, id_cdl character varying)
+CREATE FUNCTION db_esami.get_esami_futuri_by_id_docente(p_id_docente integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome character varying, id_cdl character varying)
+CREATE FUNCTION db_esami.get_esami_not_iscritto(p_matricola integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, nome_docente character varying, cognome_docente character varying, propedeutici_mancanti bigint)
+CREATE FUNCTION db_esami.get_esami_passati_by_id_docente(p_id_docente integer) RETURNS TABLE(id_esame integer, data date, id_insegnamento integer, id_docente integer, semestre integer, nome character varying, id_cdl character varying)
+CREATE FUNCTION db_esami.get_insegnamenti_by_cdl(p_id_cdl character varying) RETURNS TABLE(id_insegnamento integer, nome character varying, semestre integer, id_cdl character varying, id_docente integer, anno integer, docente_nome character varying, docente_cognome character varying)
+CREATE FUNCTION db_esami.get_insegnamenti_by_id_docente(p_id_docente integer) RETURNS TABLE(id_insegnamento integer, semestre integer, nome character varying, id_docente integer, id_cdl character varying)
+CREATE FUNCTION db_esami.get_insegnamento(p_id_insegnamento integer) RETURNS TABLE(id_insegnamento integer, id_cdl character varying, semestre integer, nome character varying, id_docente integer, docente_nome character varying, docente_cognome character varying, anno integer)
+CREATE FUNCTION db_esami.get_iscrizione_esame(p_matricola integer, p_id_esame integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data_esame date, id_insegnamento integer, id_docente integer, nome_insegnamento character varying, nome_studente character varying, cognome_studente character varying, id_cdl character varying)
+CREATE FUNCTION db_esami.get_iscrizioni_by_id_esame(p_id_esame integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, nome character varying, cognome character varying, id_utente integer, id_cdl character varying)
+CREATE FUNCTION db_esami.get_next_esami_iscritto(p_matricola integer) RETURNS TABLE(matricola integer, id_esame integer, voto integer, data_verbalizzazione date, data date, id_insegnamento integer, id_docente integer, semestre integer, nome_insegnamento character varying, id_cdl character varying, anno integer, nome_docente character varying, cognome_docente character varying)
+CREATE FUNCTION db_esami.get_numero_esami_mancanti(p_matricola integer) RETURNS TABLE(mancanti bigint)
+CREATE FUNCTION db_esami.get_propedeutici_by_id_insegnamento(p_id_insegnamento integer) RETURNS TABLE(id_richiesto integer, nome_insegnamento character varying)
+CREATE FUNCTION db_esami.get_propedeutici_mancanti(p_insegnamento integer, p_matricola integer) RETURNS TABLE(id_richiesto integer)
+CREATE FUNCTION db_esami.get_propedeutici_possibili_by_id_insegnamento(p_id_insegnamento integer) RETURNS TABLE(id_insegnamento integer, nome_insegnamento character varying)
+CREATE FUNCTION db_esami.get_segretario(p_id_segreteria integer) RETURNS TABLE(id_segreteria integer, nome character varying, cognome character varying, id_utente integer, email character varying, password character varying)
+CREATE FUNCTION db_esami.get_segretario_by_id_utente(p_id_utente integer) RETURNS TABLE(id_segreteria integer, nome character varying, cognome character varying, id_utente integer, email character varying)
+CREATE FUNCTION db_esami.get_studente(p_matricola integer) RETURNS TABLE(matricola integer, nome character varying, cognome character varying, id_utente integer, id_cdl character varying, email character varying, password character varying)
+CREATE FUNCTION db_esami.get_studente_by_id_utente(p_id_utente integer) RETURNS TABLE(matricola integer, nome character varying, cognome character varying, id_utente integer, id_cdl character varying, email character varying)
+CREATE FUNCTION db_esami.get_tipi_laurea() RETURNS TABLE(tipo character varying)
+CREATE FUNCTION db_esami.get_utenti() RETURNS TABLE(id_utente integer, nome character varying, cognome character varying, email character varying, password character varying, ruolo text)
+CREATE FUNCTION db_esami.getutentebyemail(p_email character varying) RETURNS TABLE(id_utente integer, nome character varying, cognome character varying, email character varying, password character varying, ruolo text)
+
+
+CREATE FUNCTION db_esami.tr_archivia_studente() RETURNS trigger
+CREATE FUNCTION db_esami.tr_delete_utente() RETURNS trigger
+CREATE FUNCTION db_esami.tr_limite_docente_insegnamenti() RETURNS trigger
+CREATE FUNCTION db_esami.tr_restrizioni_iscrizione_esami() RETURNS trigger
+CREATE FUNCTION db_esami.tr_singolo_esame_giorno_cdl() RETURNS trigger
+
+
+CREATE TRIGGER archivia_studente BEFORE DELETE ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_archivia_studente();
+CREATE TRIGGER delete_segretario AFTER DELETE ON db_esami.segreteria FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+CREATE TRIGGER delete_utente AFTER DELETE ON db_esami.docenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+CREATE TRIGGER delete_utente AFTER INSERT ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+CREATE TRIGGER limite_docente_insegnamenti BEFORE INSERT ON db_esami.insegnamenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_limite_docente_insegnamenti();
+CREATE TRIGGER singolo_esame_giorno_cdl BEFORE INSERT ON db_esami.esami FOR EACH ROW EXECUTE FUNCTION db_esami.tr_singolo_esame_giorno_cdl();
+CREATE TRIGGER tr_restrizioni_iscrizione_esami BEFORE INSERT ON db_esami.iscrizioni_esami FOR EACH ROW EXECUTE FUNCTION db_esami.tr_restrizioni_iscrizione_esami();

@@ -18,4 +18,9 @@ class HelperData
     {
         return "password";
     }
+
+    public static function defaultRedirectTime(): int
+    {
+        return 2;
+    }
 }

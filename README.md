@@ -31,7 +31,8 @@ PHP 8 o superiore con le seguenti estensioni:
 Il database può essere popolato con [dump.sql](./dump.sql) che è stato generato
 usando [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html)
 
-Il dump è già popolato con i seguenti utenti per facilitare il testing:
+Il dump è già popolato con i seguenti utenti per facilitare il testing (tutti gli utenti hanno come password "
+password"):
 
 | Email                      | Password | Ruolo      |
 |----------------------------|----------|------------|

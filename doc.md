@@ -1,4 +1,4 @@
-# Documentazione ten100%cica
+# Documentazione tecnica
 
 ## Indice
 
@@ -6,7 +6,17 @@
 - [Schema ER](#schema-er)
 - [Schema Logico](#schema-logico)
 - [Funzionalità](#funzionalità)
+    - [Generali](#generali)
+    - [Segreteria](#segreteria)
+    - [Docente](#docente)
+    - [Studente](#studente)
+    - [Procedure, funzioni e trigger](#procedure-funzioni-e-trigger)
 - [Struttura del progetto](#struttura-del-progetto)
+    - [Struttura dei file](#struttura-dei-file)
+    - [Views](#views)
+    - [Controllers](#controllers)
+    - [Routing](#routing)
+    - [Interazione con il database](#interazione-con-il-database)
 - [Prove di funzionamento](#prove-di-funzionamento)
 
 ## Requisiti e installazione
@@ -82,6 +92,108 @@ I requisiti e istruzioni per l'installazione e deploy possono essere trovati nel
 - Visualizza carriera
 - Visualizza carriera valida
 - Visualizza CDL (visualizza tutti gli insegnamenti di ogni corso di laurea e le loro propedeuticità)
+
+### Procedure, funzioni e trigger
+
+#### Procedure
+
+- ``add_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea)``: aggiunge un
+  cdl al database
+- ``add_docente(IN p_nome character varying, IN p_cognome character varying, IN p_password character varying)``:
+  aggiunge un docente al database
+- ``add_esame(IN p_data date, IN p_id_insegnamento integer, IN p_id_docente integer)``: aggiunge un esame al database
+- ``add_insegnamento(IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer)``:
+  aggiunge un insegnamento al database
+- ``add_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer)``: aggiunge un esame propedeutico a un
+  insegnamento
+- ``add_segretario(IN p_nome character varying, IN p_cognome character varying, IN p_password character varying)``:
+  aggiunge un segretario al database
+- ``add_studente(IN p_nome character varying, IN p_cognome character varying, IN p_id_cdl character varying, IN p_password character varying)``:
+  aggiunge uno studente al database
+- ``delete_cdl(IN p_id_cdl character varying)``: elimina un cdl dal database
+- ``delete_docente(IN p_id_docente integer)``: elimina un docente dal database
+- ``delete_esame(IN p_id_esame integer)``: elimina un esame dal database
+- ``delete_insegnamento(IN p_id_insegnamento integer)``: elimina un insegnamento dal database
+- ``delete_iscrizione_esame(IN p_matricola integer, IN p_id_esame integer)``: elimina l'iscrizione di uno studente a un
+  esame
+- ``delete_propedeutico(IN p_id_insegnamento integer, IN p_id_richiesto integer)``: elimina un esame propedeutico da un
+  insegnamento
+- ``delete_segretario(IN p_id_segreteria integer)``: elimina un segretario dal database
+- ``delete_studente(IN p_matricola integer)``: elimina uno studente dal database
+- ``iscrivi_studente_a_esame(IN p_matricola integer, IN p_id_esame integer)``: iscrive uno studente a un esame
+- ``update_cdl(IN p_id_cdl character varying, IN p_nome character varying, IN p_tipo db_esami.tipo_laurea)``: aggiorna
+  un cdl nel database
+- ``update_docente(IN p_id_docente integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)``:
+  aggiorna un docente nel database
+- ``update_esame(IN p_id_esame integer, IN p_data date)``: aggiorna un esame nel database
+- ``update_insegnamento(IN p_id_insegnamento integer, IN p_semestre integer, IN p_nome character varying, IN p_id_docente integer, IN p_id_cdl character varying, IN p_anno integer)``:
+  aggiorna un insegnamento nel database
+- ``update_segretario(IN p_id_segreteria integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)``:
+  aggiorna un segretario nel database
+- ``update_studente(IN p_matricola integer, IN p_nome character varying, IN p_cognome character varying, IN p_email character varying, IN p_password character varying)``:
+  aggiorna uno studente nel database
+- ``update_user_password(IN p_id_utente integer, IN p_password character varying)``: aggiorna la password di un utente
+- ``update_valutazione(IN p_id_esame integer, IN p_matricola integer, IN p_voto integer)``: aggiorna la valutazione di
+  un esame per uno studente
+
+#### Funzioni
+
+- ``get_all_esami_iscritto(p_matricola integer)``: restituisce tutti gli esami a cui si è iscritto uno studente
+- ``get_esame(p_id_esame integer)``: restituisce le informazioni di un esame
+- ``get_esami_by_cdl(p_id_cdl character varying)``: restituisce tutti gli esami di un corso di laurea
+- ``get_esami_futuri_by_id_docente(p_id_docente integer)``: restituisce tutti gli esami futuri tenuti da un docente
+- ``get_esami_not_iscritto(p_matricola integer)``: restituisce tutti gli esami del proprio cdl a cui uno studente non si
+  è iscritto e se ci sono propedeuticità mancanti per quell'esame
+- ``get_esami_passati_by_id_docente(p_id_docente integer)``: restituisce tutti gli esami passati tenuti da un docente
+- ``get_iscrizione_esame(p_matricola integer, p_id_esame integer)``: restituisce le informazioni dell'iscrizione di uno
+  studente a un esame
+- ``get_iscrizioni_by_id_esame(p_id_esame integer)``: restituisce tutte le iscrizioni a un esame
+- ``get_next_esami_iscritto(p_matricola integer)``: restituisce i prossimi esami a cui uno studente si è iscritto
+- ``get_numero_esami_mancanti(p_matricola integer)``: restituisce il numero di esami mancanti a uno studente per
+  laurearsi
+- ``get_all_studenti_archiviati()``: restituisce tutti gli studenti archiviati
+- ``get_carriera_valida(p_matricola integer)``: restituisce la carriera valida di uno studente
+- ``get_carriera_valida_archiviata(p_matricola integer)``: restituisce la carriera valida di uno studente archiviato
+- ``get_propedeutici_mancanti(p_insegnamento integer, p_matricola integer)``: restituisce gli insegnamenti propedeutici
+  mancanti a uno studente per iscriversi a un insegnamento
+- ``get_studente(p_matricola integer)``: restituisce le informazioni di uno studente
+- ``get_studente_by_id_utente(p_id_utente integer)``: restituisce le informazioni di uno studente tramite l'ID utente
+- ``get_docente(p_id_docente integer)``: restituisce le informazioni di un docente
+- ``get_docente_by_id_utente(p_id_utente integer)``: restituisce le informazioni di un docente tramite l'ID utente
+- ``get_segretario(p_id_segreteria integer)``: restituisce le informazioni di un segretario
+- ``get_segretario_by_id_utente(p_id_utente integer)``: restituisce le informazioni di un segretario tramite l'ID utente
+- ``get_tipi_laurea()``: restituisce tutti i tipi di laurea
+- ``get_utenti()``: restituisce tutti gli utenti
+- ``getutentebyemail(p_email character varying)``: restituisce le informazioni di un utente tramite l'email
+- ``get_propedeutici_by_id_insegnamento(p_id_insegnamento integer)``: restituisce tutti gli insegnamenti propedeutici a
+  un insegnamento
+- ``get_propedeutici_possibili_by_id_insegnamento(p_id_insegnamento integer)``: restituisce tutti gli insegnamenti che
+  possono essere aggiunti alle propedeuticità di un insegnamento (quindi tutti gli esami del cdl meno quelli già
+  propedeutici)
+- ``get_all_verbali_by_matricola_archiviata(p_matricola integer)``: restituisce i verbali (esami archiviati) dato uno
+  studente archiviato
+- ``get_cdl(p_id_cdl character varying)``: restituisce le informazioni di un cdl
+- ``get_esami_by_id_docente(p_id_docente integer)``: restituisce gli esami di un docente
+- ``get_insegnamenti_by_cdl(p_id_cdl character varying)``: restituisce gli insegnamenti di un cdl
+- ``get_insegnamenti_by_id_docente(p_id_docente integer)``: restituisce gli insegnamenti di un docente
+- ``get_insegnamento(p_id_insegnamento integer)``: restituisce le informazioni di un insegnamento
+
+#### Trigger
+
+- ``limite_docente_insegnamenti BEFORE INSERT ON db_esami.insegnamenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_limite_docente_insegnamenti()``:
+  non permette a un docente di essere associato a più di 3 insegnamenti
+- ``singolo_esame_giorno_cdl BEFORE INSERT ON db_esami.esami FOR EACH ROW EXECUTE FUNCTION db_esami.tr_singolo_esame_giorno_cdl()``:
+  impedisce di avere più esami dello stesso cdl e dello stesso anno nella stessa giornata
+- ``tr_restrizioni_iscrizione_esami BEFORE INSERT ON db_esami.iscrizioni_esami FOR EACH ROW EXECUTE FUNCTION db_esami.tr_restrizioni_iscrizione_esami()``:
+  non permette a uno studente di iscriversi ad alcuni esami (manzanza di propedeuticità, cdl diverso dal suo)
+- ``archivia_studente BEFORE DELETE ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_archivia_studente()``:
+  archivia uno studente e tutta la sua carriera al momento della cancellazione
+- ``delete_segretario AFTER DELETE ON db_esami.segreteria FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente()``:
+  cancella l'utente associato al segretario al momento della cancellazione del segretario
+- ``delete_docente AFTER DELETE ON db_esami.docenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente()``:
+  cancella l'utente associato al docente al momento della cancellazione del docente
+- ``delete_studente AFTER INSERT ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente()``:
+  cancella l'utente associato allo studente al momento della cancellazione dello studente
 
 ## Struttura del progetto
 
@@ -266,3 +378,4 @@ private function query_params(string $query, array $argArr): bool|array
 ```
 
 Il metodo esegue una query parametrizzata e provvede al fetch dei risultati restituendoli sotto forma di array
+

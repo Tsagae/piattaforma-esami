@@ -60,6 +60,7 @@ class Docenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Docente inserito correttamente</h1>'
+            . view('templates/redirect', ['url' => '/segreteria/docenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -93,6 +94,7 @@ class Docenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h3>Docente rimosso correttamente</h3>'
+            . view('templates/redirect', ['url' => '/segreteria/docenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -142,6 +144,7 @@ class Docenti extends BaseController
         }
         return view('templates/header', ['title' => 'Segreteria'])
             . '<h1>Dati aggiornati correttamente</h1>'
+            . view('templates/redirect', ['url' => '/segreteria/docenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 

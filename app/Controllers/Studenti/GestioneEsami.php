@@ -113,7 +113,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Studenti'])
             . '<h3>Studente iscritto correttamente</h3>'
-            . view('templates/redirect', ['url' => '/studenti', 'delay' => 3])
+            . view('templates/redirect', ['url' => "/studenti", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -146,7 +146,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Studenti'])
             . '<h3>Iscrizione rimossa correttamente</h3>'
-            . view('templates/redirect', ['url' => '/studenti', 'delay' => 3])
+            . view('templates/redirect', ['url' => "/studenti", 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 

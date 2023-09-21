@@ -67,7 +67,8 @@ class InsegnamentiData
                 $insegnamento->semestre,
                 $insegnamento->nome,
                 $insegnamento->id_docente,
-                $insegnamento->id_cdl
+                $insegnamento->id_cdl,
+                $insegnamento->anno
             );
         } catch (Exception $e) {
             $error = "Impossibile aggiornare insegnamento";

@@ -7,7 +7,7 @@
         <div class="card mb-3"">
         <div class="card-header">
             <p>
-                <?= esc($studente->matricola) ?> <?= esc($studente->nome) ?> <?= esc($studente->cognome) ?> <?= esc($studente->email) ?>
+                Matricola: <?= esc($studente->matricola) ?> <?= esc($studente->nome) ?> <?= esc($studente->cognome) ?>
             </p>
         </div>
         <div class="card-body d-flex flex-row justify-content-center align-items-center">

@@ -4,6 +4,7 @@ namespace App\Controllers\Docenti;
 
 use App\Controllers\BaseController;
 use App\Repositories\EsamiData;
+use App\Repositories\HelperData;
 use App\Repositories\InsegnamentiData;
 
 class GestioneEsami extends BaseController
@@ -13,6 +14,7 @@ class GestioneEsami extends BaseController
         if (session()->get('docente')->id_docente != $id_docente) {
             return view('templates/header', ['title' => 'Docenti'])
                 . '<h1>Accesso negato</h1>'
+                . view('templates/redirect', ['url' => '/', 'delay' => HelperData::defaultRedirectTime()])
                 . view('templates/footer');
         }
         return null;
@@ -105,6 +107,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h1>Esame aggiunto correttamente</h1>'
+            . view('templates/redirect', ['url' => '/docenti/esami', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -160,6 +163,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h3>Insegnamento rimosso correttamente</h3>'
+            . view('templates/redirect', ['url' => '/docenti/esami', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -234,6 +238,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h3>Esame modificato correttamente</h3>'
+            . view('templates/redirect', ['url' => '/docente/esami', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -355,6 +360,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h3>Valutazione aggiornata correttamente</h3>'
+            . view('templates/redirect', ['url' => '/', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 }
