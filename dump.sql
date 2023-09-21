@@ -1598,7 +1598,8 @@ CREATE TABLE db_esami.insegnamenti (
     id_docente integer NOT NULL,
     id_cdl character varying NOT NULL,
     anno integer NOT NULL,
-    CONSTRAINT insegnamenti_check CHECK (((semestre = 1) OR (semestre = 2)))
+    CONSTRAINT insegnamenti_check CHECK (((semestre = 1) OR (semestre = 2))),
+    CONSTRAINT insegnamenti_check2 CHECK ((anno >= 0))
 );
 
 
@@ -1816,6 +1817,7 @@ UNION
 
 COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, data_archiviazione) FROM stdin;
 39	L-31	Luca	Corradini	f	2023-09-21
+40	L-31	Michele	Bolis	f	2023-09-21
 \.
 
 
@@ -1835,6 +1837,7 @@ COPY db_esami.archivio_verbali (id_esame, matricola_archiviata, data_verbalizzaz
 COPY db_esami.cdl (nome, tipo, id_cdl) FROM stdin;
 Fisica	Triennale	L-30
 Informatica	Triennale	L-31
+Scienze e Tecnologie Chimiche	Triennale	L-27
 \.
 
 
@@ -1847,6 +1850,7 @@ COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
 8	Alberto	Ceselli	58
 6	Massimo	Santini	51
 1	Alberto Nunzio	Borghese	7
+10	Valerio	Bellandi	65
 \.
 
 
@@ -1863,6 +1867,7 @@ COPY db_esami.esami (id_esame, data, id_insegnamento, id_docente) FROM stdin;
 36	2023-11-08	10	1
 35	2023-09-13	10	1
 34	2023-09-05	10	1
+37	2023-12-19	11	1
 \.
 
 
@@ -1871,11 +1876,12 @@ COPY db_esami.esami (id_esame, data, id_insegnamento, id_docente) FROM stdin;
 --
 
 COPY db_esami.insegnamenti (id_insegnamento, semestre, nome, id_docente, id_cdl, anno) FROM stdin;
-8	1	Programmazione I	8	L-31	1
 9	1	Programmazione II	6	L-31	2
 10	1	Architettura Degli Elaboratori I	1	L-31	1
 11	2	Architettura Degli Elaboratori II 	1	L-31	1
 12	1	Fisica I	9	L-30	1
+13	2	Basi di Dati	10	L-31	2
+8	1	Programmazione I	8	L-31	1
 \.
 
 
@@ -1886,7 +1892,8 @@ COPY db_esami.insegnamenti (id_insegnamento, semestre, nome, id_docente, id_cdl,
 COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione) FROM stdin;
 36	29	30	2023-09-21
 36	34	18	2023-09-21
-36	35	22	2023-09-21
+36	35	23	2023-09-21
+38	36	\N	\N
 \.
 
 
@@ -1897,6 +1904,7 @@ COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione)
 COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
 9	8
 11	10
+13	8
 \.
 
 
@@ -1933,6 +1941,7 @@ COPY db_esami.utenti (id_utente, email, password) FROM stdin;
 58	alberto.ceselli@unimips.it	$2y$10$O7N96saVONvJzVHAM4wsIeFuIAjNur482Ab7AtUBWCWQtyBkXenRK
 51	massimo.santini@unimips.it	$2y$10$CmzRbHQrOVz5dxns2xb93.CfvgCGBe/ChSH.qDdg93g2GsugKWHZG
 7	albertonunzio.borghese@unimips.it	$2y$10$2/Pti1GD/dkQ..RJTx/nqO1uRoTztXolm70iH/wQZDE733/Fqew8a
+65	valerio.bellandi@unimips.it	$2y$10$mACDF4c4DIpNSXszajQx.Ogn42OQr0NWALKkFDzCPHp6CySzwrGgi
 54	studentenome.studcognome@unimips.it	$2y$10$vNaqwIAC/Thf4Q4crvIP7eaLdTm6kiihRcUv8DpDLmWdmxrHdNevy
 \.
 
@@ -1941,21 +1950,21 @@ COPY db_esami.utenti (id_utente, email, password) FROM stdin;
 -- Name: docenti_id_docente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.docenti_id_docente_seq', 9, true);
+SELECT pg_catalog.setval('db_esami.docenti_id_docente_seq', 10, true);
 
 
 --
 -- Name: esami_id_esame_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.esami_id_esame_seq', 36, true);
+SELECT pg_catalog.setval('db_esami.esami_id_esame_seq', 37, true);
 
 
 --
 -- Name: insegnamenti_id_insegnamento_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.insegnamenti_id_insegnamento_seq', 12, true);
+SELECT pg_catalog.setval('db_esami.insegnamenti_id_insegnamento_seq', 13, true);
 
 
 --
@@ -1969,14 +1978,14 @@ SELECT pg_catalog.setval('db_esami.segreteria_id_segreterial_seq', 4, true);
 -- Name: studenti_matricola_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.studenti_matricola_seq', 39, true);
+SELECT pg_catalog.setval('db_esami.studenti_matricola_seq', 40, true);
 
 
 --
 -- Name: utenti_id_utente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 63, true);
+SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 65, true);
 
 
 --

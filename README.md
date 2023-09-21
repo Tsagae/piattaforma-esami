@@ -34,11 +34,11 @@ usando [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html)
 Il dump è già popolato con i seguenti utenti per facilitare il testing (tutti gli utenti hanno come password "
 password"):
 
-| Email                      | Password | Ruolo      |
-|----------------------------|----------|------------|
-| studente.test@unimips.it   | password | Studente   |
-| docente.test@unimips.it    | password | Docente    |
-| segretario.test@unimips.it | password | Segretario |
+| Email                             | Password | Ruolo      |
+|-----------------------------------|----------|------------|
+| matteo.zagheno@unimips.it         | password | Studente   |
+| albertonunzio.borghese@unimips.it | password | Docente    |
+| segretario.segretario@unimips.it  | password | Segretario |
 
 "password" è la password di default che viene assegnata a ogni utente al momento della creazione
 

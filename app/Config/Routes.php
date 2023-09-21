@@ -44,7 +44,7 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 $routes->get('logout', [LoginController::class, 'logout']);
-$routes->match(['get', 'post'], 'secondtest/create', [SecondController::class, 'create']);
+//$routes->match(['get', 'post'], 'secondtest/create', [SecondController::class, 'create']);
 $routes->match(['get', 'post'], 'login', [LoginController::class, 'login']);
 $routes->get( '/unauthorized', [LoginController::class, 'unauthorized']);
 
@@ -126,8 +126,8 @@ $routes->match(['get', 'post'], '/studenti/rinuncia', [Index::class, 'rinuncia']
 
 
 //Testing
-$routes->get('pages', [Pages::class, 'index']);
-$routes->match(['get', 'post'], 'pages/(:segment)', [Pages::class, 'view']);
+//$routes->get('pages', [Pages::class, 'index']);
+//$routes->match(['get', 'post'], 'pages/(:segment)', [Pages::class, 'view']);
 
 /*
  * --------------------------------------------------------------------
