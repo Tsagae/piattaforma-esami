@@ -1815,6 +1815,7 @@ UNION
 --
 
 COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, data_archiviazione) FROM stdin;
+39	L-31	Luca	Corradini	f	2023-09-21
 \.
 
 
@@ -1823,6 +1824,7 @@ COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, dat
 --
 
 COPY db_esami.archivio_verbali (id_esame, matricola_archiviata, data_verbalizzazione, voto) FROM stdin;
+31	39	2023-09-21	30
 \.
 
 
@@ -1841,10 +1843,10 @@ Informatica	Triennale	L-31
 --
 
 COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
-1	Alberto Nunzio	Borghese	7
-6	Massimo	Santini	51
-8	Alberto	Ceselli	58
 9	Docente	Fisica	60
+8	Alberto	Ceselli	58
+6	Massimo	Santini	51
+1	Alberto Nunzio	Borghese	7
 \.
 
 
@@ -1885,7 +1887,6 @@ COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione)
 36	29	30	2023-09-21
 36	34	18	2023-09-21
 36	35	22	2023-09-21
-39	31	30	2023-09-21
 \.
 
 
@@ -1904,7 +1905,6 @@ COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
 --
 
 COPY db_esami.segreteria (id_segreteria, nome, cognome, id_utente) FROM stdin;
-1	Luigi	Pepe	6
 4	Segretario	Segretario	56
 \.
 
@@ -1914,10 +1914,9 @@ COPY db_esami.segreteria (id_segreteria, nome, cognome, id_utente) FROM stdin;
 --
 
 COPY db_esami.studenti (matricola, nome, cognome, id_utente, id_cdl) FROM stdin;
-36	Matteo	Zagheno	59	L-31
 37	Mattia	Delledonne	61	L-30
 38	Luca	Favini	62	L-31
-39	Luca	Corradini	63	L-31
+36	Matteo	Zagheno	59	L-31
 \.
 
 
@@ -1926,16 +1925,14 @@ COPY db_esami.studenti (matricola, nome, cognome, id_utente, id_cdl) FROM stdin;
 --
 
 COPY db_esami.utenti (id_utente, email, password) FROM stdin;
-56	segreatario.segretario@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
-58	alberto.ceselli@unimips.it	$2y$10$C8C.v6w6d/P8ckhtWm/ur.fbWx/DZlAGaEHRtgWZyYUufSokrAHr2
-59	matteo.zagheno@unimips.it	$2y$10$p/BJAFv5pwJIyx44T4L7HumNIH.DdLPOSBfM18jPrMJ.ad9gszj/e
-60	docente.fisica@unimips.it	$2y$10$LVSsi9J./xf2RsJ.XKjWcOrqvg7qvfviMbndI7BirDRjFKhpCo6FS
 61	mattia.delledonne@unimips.it	$2y$10$SU7fzQu68d2k7lAJU9MVeOsYL8zgHlvHHP8oDjcc1OPiAW9S4VVni
 62	luca.favini@unimips.it	$2y$10$LwJdROPkVsNnDuE/OpwY7OVOIdTEi4f2KVntYFh0cZaBA3KfKwU3C
-63	luca.corradini@unimips.it	$2y$10$f4gqq6UW1668ESN.f3JCF.umlpOP0f/37Yj5g5nXMSQLRTiX5FNuq
-7	albertonunzio.borghese@unimips.it	$2y$10$bkpD9V4EG9/vy5axUWuNnui9LxJcW86ok0eBccPHbXhC4x5EcXJry
-6	luigi.pepe@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
-51	massimo.santini@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+56	segretario.segretario@unimips.it	$2y$10$MDOPfPBUaklXvb2xm7JAw.oiINnNnLfgmMYUweHHVP9zJrNdPlUMS
+59	matteo.zagheno@unimips.it	$2y$10$TKzFaLXgE79aDN3vrOtqDevnjobVHV6TfL/Lhsq4njBgPn2boWJQS
+60	docente.fisica@unimips.it	$2y$10$ZjuuZjsfjh6UAW0wqjEZxeon.kPqIrvRETizWKgd5ITKM7ydgV3U2
+58	alberto.ceselli@unimips.it	$2y$10$O7N96saVONvJzVHAM4wsIeFuIAjNur482Ab7AtUBWCWQtyBkXenRK
+51	massimo.santini@unimips.it	$2y$10$CmzRbHQrOVz5dxns2xb93.CfvgCGBe/ChSH.qDdg93g2GsugKWHZG
+7	albertonunzio.borghese@unimips.it	$2y$10$2/Pti1GD/dkQ..RJTx/nqO1uRoTztXolm70iH/wQZDE733/Fqew8a
 54	studentenome.studcognome@unimips.it	$2y$10$vNaqwIAC/Thf4Q4crvIP7eaLdTm6kiihRcUv8DpDLmWdmxrHdNevy
 \.
 
