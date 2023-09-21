@@ -58,6 +58,8 @@ database.default.hostname = [hostname o indirizzo]
 database.default.database = [nome del database]
 database.default.username = [postgres username]
 database.default.password = [postgres password]
+
+CI_ENVIRONMENT = production
 ```
 
 - Per avviare il server:
