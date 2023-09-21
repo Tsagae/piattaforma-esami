@@ -25,7 +25,7 @@ class Carriera extends BaseController
         $items = [];
         foreach ($data['esami'] as $esame) {
             $item = new \stdClass();
-            $item->head = $esame->id_esame . " " . $esame->nome_insegnamento;
+            $item->head = $esame->nome_insegnamento;
             $item->body = ["$esame->data $esame->nome_docente $esame->cognome_docente"];
             if ($esame->voto != null) {
                 $item->body[] = "Voto: $esame->voto";
@@ -55,7 +55,7 @@ class Carriera extends BaseController
         $items = [];
         foreach ($data['esami'] as $esame) {
             $item = new \stdClass();
-            $item->head = $esame->id_esame . " " . $esame->nome_insegnamento;
+            $item->head = $esame->nome_insegnamento;
             $item->body = ["$esame->data $esame->nome_docente $esame->cognome_docente"];
             if ($esame->voto != null) {
                 $item->body[] = "Voto: $esame->voto";

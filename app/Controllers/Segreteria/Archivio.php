@@ -19,8 +19,8 @@ class Archivio extends BaseController
         $items = [];
         foreach ($studenti_archiviati as $studente) {
             $item = new \stdClass();
-            $item->head = $studente->matricola . " " . $studente->nome . " " . $studente->cognome;
-            $item->body = [$studente->id_cdl, $studente->nome_cdl, $studente->tipo_cdl, $studente->laureato ? "Laureato" : "Non laureato"];
+            $item->head = "Matricola: $studente->matricola" . " " . $studente->nome . " " . $studente->cognome;
+            $item->body = [$studente->id_cdl, $studente->nome_cdl, $studente->tipo_cdl, !$studente->laureato ? "Laureato" : "Non Laureato"];
             $item->buttons = [
                 (object)['link' => "/segreteria/archivio/carriera?matricola=$studente->matricola", 'style' => "btn btn-primary m-1", 'text' => "Carriera"],
                 (object)['link' => "/segreteria/archivio/carrieravalida?matricola=$studente->matricola", 'style' => "btn btn-primary m-1", 'text' => "Carriera Valida"]
