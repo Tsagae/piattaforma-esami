@@ -1232,10 +1232,10 @@ $$;
 
 
 --
--- Name: tr_delete_utente_after(); Type: FUNCTION; Schema: db_esami; Owner: -
+-- Name: tr_delete_utente(); Type: FUNCTION; Schema: db_esami; Owner: -
 --
 
-CREATE FUNCTION db_esami.tr_delete_utente_after() RETURNS trigger
+CREATE FUNCTION db_esami.tr_delete_utente() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1661,7 +1661,8 @@ CREATE TABLE db_esami.iscrizioni_esami (
     matricola integer NOT NULL,
     id_esame integer NOT NULL,
     voto integer,
-    data_verbalizzazione date
+    data_verbalizzazione date,
+    CONSTRAINT iscrizioni_esami_check CHECK (((voto >= 0) AND (voto <= 30)))
 );
 
 
@@ -1814,8 +1815,6 @@ UNION
 --
 
 COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, data_archiviazione) FROM stdin;
-33	L-31	studente2	cognome	f	2023-09-19
-34	L-30	StudenteNome	StudCognome	f	2023-09-20
 \.
 
 
@@ -1824,7 +1823,6 @@ COPY db_esami.archivio_studenti (matricola, id_cdl, nome, cognome, laureato, dat
 --
 
 COPY db_esami.archivio_verbali (id_esame, matricola_archiviata, data_verbalizzazione, voto) FROM stdin;
-3	33	2023-09-19	19
 \.
 
 
@@ -1833,8 +1831,8 @@ COPY db_esami.archivio_verbali (id_esame, matricola_archiviata, data_verbalizzaz
 --
 
 COPY db_esami.cdl (nome, tipo, id_cdl) FROM stdin;
-Informatica	Triennale	L-31
 Fisica	Triennale	L-30
+Informatica	Triennale	L-31
 \.
 
 
@@ -1845,7 +1843,8 @@ Fisica	Triennale	L-30
 COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
 1	Alberto Nunzio	Borghese	7
 6	Massimo	Santini	51
-7	DocenteNome	DocCognome	55
+8	Alberto	Ceselli	58
+9	Docente	Fisica	60
 \.
 
 
@@ -1854,13 +1853,14 @@ COPY db_esami.docenti (id_docente, nome, cognome, id_utente) FROM stdin;
 --
 
 COPY db_esami.esami (id_esame, data, id_insegnamento, id_docente) FROM stdin;
-27	2023-09-27	6	6
-23	2023-09-24	2	1
-25	2023-09-26	1	1
-5	2023-09-23	2	1
-3	2023-09-10	1	1
-2	2023-09-11	2	1
-4	2023-09-13	4	1
+30	2023-11-29	8	8
+32	2023-11-30	11	1
+33	2023-12-11	9	6
+29	2023-09-20	8	8
+31	2023-09-10	10	1
+36	2023-11-08	10	1
+35	2023-09-13	10	1
+34	2023-09-05	10	1
 \.
 
 
@@ -1869,10 +1869,11 @@ COPY db_esami.esami (id_esame, data, id_insegnamento, id_docente) FROM stdin;
 --
 
 COPY db_esami.insegnamenti (id_insegnamento, semestre, nome, id_docente, id_cdl, anno) FROM stdin;
-1	1	Architettura I	1	L-31	1
-2	2	Architettura II	1	L-31	1
-4	1	Fisica Borghese	1	L-30	1
-6	1	Programmazione II	6	L-31	2
+8	1	Programmazione I	8	L-31	1
+9	1	Programmazione II	6	L-31	2
+10	1	Architettura Degli Elaboratori I	1	L-31	1
+11	2	Architettura Degli Elaboratori II 	1	L-31	1
+12	1	Fisica I	9	L-30	1
 \.
 
 
@@ -1881,7 +1882,10 @@ COPY db_esami.insegnamenti (id_insegnamento, semestre, nome, id_docente, id_cdl,
 --
 
 COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione) FROM stdin;
-35	4	28	2023-09-20
+36	29	30	2023-09-21
+36	34	18	2023-09-21
+36	35	22	2023-09-21
+39	31	30	2023-09-21
 \.
 
 
@@ -1890,8 +1894,8 @@ COPY db_esami.iscrizioni_esami (matricola, id_esame, voto, data_verbalizzazione)
 --
 
 COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
-2	1
-2	6
+9	8
+11	10
 \.
 
 
@@ -1900,9 +1904,8 @@ COPY db_esami.propedeutici (id_insegnamento, id_richiesto) FROM stdin;
 --
 
 COPY db_esami.segreteria (id_segreteria, nome, cognome, id_utente) FROM stdin;
-3	rob	pv	53
-4	SegretarioNome	SegCognome	56
 1	Luigi	Pepe	6
+4	Segretario	Segretario	56
 \.
 
 
@@ -1911,8 +1914,10 @@ COPY db_esami.segreteria (id_segreteria, nome, cognome, id_utente) FROM stdin;
 --
 
 COPY db_esami.studenti (matricola, nome, cognome, id_utente, id_cdl) FROM stdin;
-1	Matteo	Zaghenoooo	2	L-31
-35	Studente	Fisico	57	L-30
+36	Matteo	Zagheno	59	L-31
+37	Mattia	Delledonne	61	L-30
+38	Luca	Favini	62	L-31
+39	Luca	Corradini	63	L-31
 \.
 
 
@@ -1921,15 +1926,17 @@ COPY db_esami.studenti (matricola, nome, cognome, id_utente, id_cdl) FROM stdin;
 --
 
 COPY db_esami.utenti (id_utente, email, password) FROM stdin;
+56	segreatario.segretario@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
+58	alberto.ceselli@unimips.it	$2y$10$C8C.v6w6d/P8ckhtWm/ur.fbWx/DZlAGaEHRtgWZyYUufSokrAHr2
+59	matteo.zagheno@unimips.it	$2y$10$p/BJAFv5pwJIyx44T4L7HumNIH.DdLPOSBfM18jPrMJ.ad9gszj/e
+60	docente.fisica@unimips.it	$2y$10$LVSsi9J./xf2RsJ.XKjWcOrqvg7qvfviMbndI7BirDRjFKhpCo6FS
+61	mattia.delledonne@unimips.it	$2y$10$SU7fzQu68d2k7lAJU9MVeOsYL8zgHlvHHP8oDjcc1OPiAW9S4VVni
+62	luca.favini@unimips.it	$2y$10$LwJdROPkVsNnDuE/OpwY7OVOIdTEi4f2KVntYFh0cZaBA3KfKwU3C
+63	luca.corradini@unimips.it	$2y$10$f4gqq6UW1668ESN.f3JCF.umlpOP0f/37Yj5g5nXMSQLRTiX5FNuq
+7	albertonunzio.borghese@unimips.it	$2y$10$bkpD9V4EG9/vy5axUWuNnui9LxJcW86ok0eBccPHbXhC4x5EcXJry
 6	luigi.pepe@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
-7	albertonunzio.borghese@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
-53	rob.pv@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
-55	docentenome.doccognome@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
 51	massimo.santini@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
-2	matteo.zagheno@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
-56	segretarionome.segcognome@unimips.it	$2y$10$M.p0eFKXZQj2NzvKoq8e9.zwxRion29t4TAluz3SUu5BaImu5ohmC
 54	studentenome.studcognome@unimips.it	$2y$10$vNaqwIAC/Thf4Q4crvIP7eaLdTm6kiihRcUv8DpDLmWdmxrHdNevy
-57	studente.fisico@unimips.it	$2y$10$e/9WAWhBcDSSsJQ5NSKXMORFfQus8wzZm7bUQrUfoPk85vUe6sc1K
 \.
 
 
@@ -1937,21 +1944,21 @@ COPY db_esami.utenti (id_utente, email, password) FROM stdin;
 -- Name: docenti_id_docente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.docenti_id_docente_seq', 7, true);
+SELECT pg_catalog.setval('db_esami.docenti_id_docente_seq', 9, true);
 
 
 --
 -- Name: esami_id_esame_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.esami_id_esame_seq', 28, true);
+SELECT pg_catalog.setval('db_esami.esami_id_esame_seq', 36, true);
 
 
 --
 -- Name: insegnamenti_id_insegnamento_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.insegnamenti_id_insegnamento_seq', 6, true);
+SELECT pg_catalog.setval('db_esami.insegnamenti_id_insegnamento_seq', 12, true);
 
 
 --
@@ -1965,14 +1972,14 @@ SELECT pg_catalog.setval('db_esami.segreteria_id_segreterial_seq', 4, true);
 -- Name: studenti_matricola_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.studenti_matricola_seq', 35, true);
+SELECT pg_catalog.setval('db_esami.studenti_matricola_seq', 39, true);
 
 
 --
 -- Name: utenti_id_utente_seq; Type: SEQUENCE SET; Schema: db_esami; Owner: -
 --
 
-SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 57, true);
+SELECT pg_catalog.setval('db_esami.utenti_id_utente_seq', 63, true);
 
 
 --
@@ -2082,21 +2089,21 @@ CREATE TRIGGER archivia_studente BEFORE DELETE ON db_esami.studenti FOR EACH ROW
 -- Name: segreteria delete_segretario; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
-CREATE TRIGGER delete_segretario AFTER DELETE ON db_esami.segreteria FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+CREATE TRIGGER delete_segretario AFTER DELETE ON db_esami.segreteria FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente();
 
 
 --
 -- Name: docenti delete_utente; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
-CREATE TRIGGER delete_utente AFTER DELETE ON db_esami.docenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+CREATE TRIGGER delete_utente AFTER DELETE ON db_esami.docenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente();
 
 
 --
 -- Name: studenti delete_utente; Type: TRIGGER; Schema: db_esami; Owner: -
 --
 
-CREATE TRIGGER delete_utente AFTER INSERT ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente_after();
+CREATE TRIGGER delete_utente AFTER DELETE ON db_esami.studenti FOR EACH ROW EXECUTE FUNCTION db_esami.tr_delete_utente();
 
 
 --
@@ -2205,7 +2212,7 @@ ALTER TABLE ONLY db_esami.iscrizioni_esami
 --
 
 ALTER TABLE ONLY db_esami.propedeutici
-    ADD CONSTRAINT propedeutici__insegnamenti_richiesto_fk FOREIGN KEY (id_richiesto) REFERENCES db_esami.insegnamenti(id_insegnamento);
+    ADD CONSTRAINT propedeutici__insegnamenti_richiesto_fk FOREIGN KEY (id_richiesto) REFERENCES db_esami.insegnamenti(id_insegnamento) ON DELETE CASCADE;
 
 
 --
@@ -2213,7 +2220,7 @@ ALTER TABLE ONLY db_esami.propedeutici
 --
 
 ALTER TABLE ONLY db_esami.propedeutici
-    ADD CONSTRAINT propedeutici_insegnamenti_esame_fk FOREIGN KEY (id_insegnamento) REFERENCES db_esami.insegnamenti(id_insegnamento);
+    ADD CONSTRAINT propedeutici_insegnamenti_esame_fk FOREIGN KEY (id_insegnamento) REFERENCES db_esami.insegnamenti(id_insegnamento) ON DELETE CASCADE;
 
 
 --

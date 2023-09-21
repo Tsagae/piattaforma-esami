@@ -97,7 +97,7 @@ class GestioneEsami extends BaseController
             return $resAuth;
 
         $error = "";
-        EsamiData::addEsame((object) $post, $error);
+        EsamiData::addEsame((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
@@ -107,7 +107,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h1>Esame aggiunto correttamente</h1>'
-            . view('templates/redirect', ['url' => '/docenti/esami', 'delay' => HelperData::defaultRedirectTime()])
+            . view('templates/redirect', ['url' => '/docenti/insegnamenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -163,7 +163,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h3>Insegnamento rimosso correttamente</h3>'
-            . view('templates/redirect', ['url' => '/docenti/esami', 'delay' => HelperData::defaultRedirectTime()])
+            . view('templates/redirect', ['url' => '/docenti/insegnamenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -228,7 +228,7 @@ class GestioneEsami extends BaseController
         $resAuth = $this->autenticaDocente($esame->id_docente);
         if ($resAuth != null)
             return $resAuth;
-        EsamiData::updateEsame((object) $post, $error);
+        EsamiData::updateEsame((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
@@ -238,7 +238,7 @@ class GestioneEsami extends BaseController
         }
         return view('templates/header', ['title' => 'Docenti'])
             . '<h3>Esame modificato correttamente</h3>'
-            . view('templates/redirect', ['url' => '/docente/esami', 'delay' => HelperData::defaultRedirectTime()])
+            . view('templates/redirect', ['url' => '/docenti/insegnamenti', 'delay' => HelperData::defaultRedirectTime()])
             . view('templates/footer');
     }
 
@@ -269,10 +269,10 @@ class GestioneEsami extends BaseController
         $itemsStudenti = [];
         foreach ($studenti as $studente) {
             $item = new \stdClass();
-            $item->head = $studente->matricola;
+            $item->head = "Matricola: " . $studente->matricola;
             $item->body = [$studente->nome, $studente->cognome, "Voto: $studente->voto"];
             $item->buttons = [
-                (object) [
+                (object)[
                     "link" => "/docenti/esami/valutazioni/valuta?matricola=$studente->matricola&idesame=$esame->id_esame",
                     "style" => "btn btn-primary m-1",
                     "text" => "Valuta"
@@ -350,7 +350,7 @@ class GestioneEsami extends BaseController
         if ($resAuth != null)
             return $resAuth;
 
-        EsamiData::updateValutazione((object) $post, $error);
+        EsamiData::updateValutazione((object)$post, $error);
         if (!empty($error)) {
             error_log("error");
             $data['queryError'] = $error;
