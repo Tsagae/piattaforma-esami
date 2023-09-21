@@ -1,4 +1,4 @@
-# Progetto di basi di dati laboratorio 2022/2023
+# Manuale utente progetto di Basi di Dati laboratorio 2022/2023
 
 Il software è stato sviluppato con il framework [CodeIgniter 4](https://codeigniter.com/).
 Documentazione di riferimento: [CodeIgniter 4 User Guide](https://codeigniter.com/user_guide/index.html)
@@ -6,6 +6,10 @@ Documentazione di riferimento: [CodeIgniter 4 User Guide](https://codeigniter.co
 Inoltre è stato utilizzato [Composer](https://getcomposer.org/) come gestore delle dipedenze.
 
 Il sito è stato sviluppato e testato su Linux
+
+Realizzato da Matteo Zagheno (987403)
+
+[Documentazione tenica](./doc.md)
 
 ## Requisiti
 
