@@ -23,7 +23,7 @@ class PostgresConnection
      * @return Connection
      * @throws Exception
      */
-    public function connect(): Connection
+    private function connect(): Connection
     {
         //echo "CONSTRUCTOR FOR PostgresConnection CALLED\n";
         // read parameters in the ini configuration file
@@ -71,8 +71,9 @@ class PostgresConnection
      * @return array|bool
      * @throws Exception
      */
-    private function query_params(string $query, array $argArr): array|bool
+    private function query_params(string $query, array $argArr): bool|array
     {
+        //Costruzione della stringa di placeholder per la query parametrizzata
         $procArgs = '(';
         for ($i = 0; $i < count($argArr); $i++) {
             $sArg = $i + 1;
@@ -81,12 +82,7 @@ class PostgresConnection
         $procArgs = rtrim($procArgs);
         $procArgs = rtrim($procArgs, ',');
         $procArgs .= ')';
-        /*
-        error_log("query: $query$procArgs; \n");
-        $argsString = var_export($argArr, true);
-        error_log("argArr: $argsString\n");
-        */
-        //error_log("Query: " . "$query$procArgs;");
+        //Connessione al database ed esecuzione della query
         $conn = $this->connect();
         $dbRes = pg_query_params($conn, "$query$procArgs;", $argArr);
         if ($dbRes === false)

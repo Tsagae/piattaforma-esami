@@ -1,5 +1,5 @@
-<div>
-    <h1>Docenti</h1>
+<div class="d-flex flex-row justify-content-center align-items-center">
+    <h1>Docenti</h1> <a href="/segreteria/docenti/add" class="btn btn-primary m-1">+</a>
 </div>
 <?php if (!empty($docenti) && is_array($docenti)): ?>
 

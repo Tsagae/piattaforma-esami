@@ -6,7 +6,7 @@
         <input type="hidden" name="id_insegnamento" value="<?= esc($id_insegnamento) ?>">
         <div class="row g-3">
             <div class="row g-3 mb-3">
-                <label for="id_cdl" class="form-label">Corsi di laurea</label>
+                <label for="id_cdl" class="form-label">Insegnamenti</label>
                 <select
                     class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
                     data-bs-theme="light" name="id_richiesto" required="">

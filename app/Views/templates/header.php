@@ -15,6 +15,9 @@ function navBar(?object $user): string
             <li class="nav-item">
                 <a class="nav-link" href="/segreteria/insegnamenti">Gestione Insegnamenti</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/segreteria/archivio">Visualizza Archivio</a>
+            </li>
         HTML;
             break;
         case "studente":
@@ -54,7 +57,7 @@ function navBar(?object $user): string
     }
 
     return <<<HTML
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-secondary" >
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">Unimips</a>
                 <button class="navbar-toggler" typgine="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -91,7 +94,7 @@ function navBar(?object $user): string
     </title>
 </head>
 
-<body>
+<body style="background-color: #f7fbff">
 <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

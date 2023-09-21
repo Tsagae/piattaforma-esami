@@ -14,7 +14,7 @@ use Exception;
 
 class Index extends BaseController
 {
-    public function index()
+    public function index(): string
     {
         return view('templates/header', ['title' => 'Studenti'])
             . view('templates/menu', [

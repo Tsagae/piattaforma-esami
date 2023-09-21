@@ -31,9 +31,19 @@ PHP 8 o superiore con le seguenti estensioni:
 Il database può essere popolato con [dump.sql](./dump.sql) che è stato generato
 usando [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html)
 
-nella root directory del progetto:
+Il dump è già popolato con i seguenti utenti per facilitare il testing:
 
-creare una copia del file [env](./env) con nome .env con la seguente configurazione:
+| Email                      | Password | Ruolo      |
+|----------------------------|----------|------------|
+| studente.test@unimips.it   | password | Studente   |
+| docente.test@unimips.it    | password | Docente    |
+| segretario.test@unimips.it | password | Segretario |
+
+"password" è la password di default che viene assegnata a ogni utente al momento della creazione
+
+Nella root directory del progetto:
+
+- Creare una copia del file [env](./env) con nome .env con la seguente configurazione:
 
 ```
 database.default.hostname = [hostname o indirizzo]
@@ -42,7 +52,7 @@ database.default.username = [postgres username]
 database.default.password = [postgres password]
 ```
 
-Per avviare il server:
+- Per avviare il server:
 
 ```
 composer install
