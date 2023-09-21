@@ -1,5 +1,5 @@
 <form method="get">
-    <select name="idcdl" onchange="this.form.submit()">
+    <select name="idcdl" class="form-select d-block position-static pt-0 m-3 rounded-3 shadow overflow-hidden w-280px" onchange="this.form.submit()">
         <?php if (!empty($firstOption)): ?>
             <option value="<?= esc($firstOption->value) ?>"><?= esc($firstOption->text) ?></option>
         <?php endif; ?>

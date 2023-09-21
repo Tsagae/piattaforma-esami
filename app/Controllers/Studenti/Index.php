@@ -106,7 +106,7 @@ class Index extends BaseController
             . view("templates/selection", ['options' => $options, 'firstOption' => $firstOption])
             . view("templates/list", ['items' => $insegnamentiItems, 'noRecordsText' => "Nessun insegnamento presente per il corso di laurea $id_cdl"])
             . "<h1>Propedeuticità</h1>"
-            . view("templates/list", ['items' => $propedeuticiItems, 'noRecordsText' => "Nessuna propedeutiicità presente per il corso di laurea $id_cdl"])
+            . view("templates/list", ['items' => $propedeuticiItems, 'noRecordsText' => "Nessuna propedeuticità presente per il corso di laurea $id_cdl"])
             . view('templates/footer');
 
     }

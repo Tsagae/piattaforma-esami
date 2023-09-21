@@ -17,11 +17,12 @@ class Insegnamenti extends BaseController
 
         $data['noRecordsText'] = "Nessun insegnamento";
         $data['allCdl'] = CdlData::getAllCdl();
-        if (!$this->request->is('post')) {
+        $id_cdl = $this->request->getGet('id_cdl');
+        error_log("id_cdl: " . var_export($id_cdl, true));
+        if (empty($id_cdl)) {
             $data['insegnamenti'] = InsegnamentiData::getInsegnamenti();
         } else {
-            $post = $this->request->getPost(['id_cdl']);
-            $data['insegnamenti'] = InsegnamentiData::getInsegnamentiByCdl($post['id_cdl']);
+            $data['insegnamenti'] = InsegnamentiData::getInsegnamentiByCdl($id_cdl);
         }
 
 

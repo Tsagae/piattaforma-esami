@@ -1,8 +1,7 @@
 <div class="d-flex flex-row justify-content-center align-items-center">
     <h1 class="m-1">Insegnamenti</h1> <a href="/segreteria/insegnamenti/add" class="btn btn-primary m-1">+</a>
 </div>
-<form class="needs-validation" method="post">
-    <?= csrf_field() ?>
+<form class="needs-validation" method="get">
     <div class="row g-3 mb-3">
         <label for="id_cdl" class="form-label">Corsi di laurea</label>
         <select onchange="this.form.submit()"

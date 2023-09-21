@@ -7,7 +7,7 @@
             <div class="col-sm-6">
                 <label for="nome" class="form-label">Nome</label>
                 <input type="text" class="form-control" name="nome" placeholder="" value="<?= set_value('nome') ?>"
-                    required="">
+                       required="">
                 <div class="invalid-feedback">
                     Nome obbligatorio.
                 </div>
@@ -16,9 +16,9 @@
             <div class="col-sm-6">
                 <label for="tipo" class="form-label">Semestre</label>
                 <select
-                    class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
-                    data-bs-theme="light" name="semestre" required="" value="<?= set_value('semestre') ?>">
-                        Seleziona un semestre
+                        class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
+                        data-bs-theme="light" name="semestre" required="" value="<?= set_value('semestre') ?>">
+                    Seleziona un semestre
                     <option value="1">1</option>
                     <option value="2">2</option>
                 </select>
@@ -27,7 +27,7 @@
             <div class="col-sm-6">
                 <label for="anno" class="form-label">Anno</label>
                 <input type="number" class="form-control" name="anno" placeholder="" value="<?= set_value('anno') ?>"
-                    required="">
+                       required="">
                 <div class="invalid-feedback">
                     Anno obbligatorio.
                 </div>
@@ -38,11 +38,11 @@
             <div class="row g-3 mb-3">
                 <label for="id_cdl" class="form-label">Corsi di laurea</label>
                 <select
-                    class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
-                    data-bs-theme="light" name="id_cdl" required="" value="<?= set_value('id_cdl') ?>">
-                        <option value="">
+                        class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
+                        data-bs-theme="light" name="id_cdl" required="" value="<?= set_value('id_cdl') ?>">
+                    <option value="">
                         Seleziona un corso di laurea
-                        </option>
+                    </option>
                     <?php foreach ($allCdl as $cdl): ?>
                         <option value="<?= esc($cdl->id_cdl) ?>"><?= esc($cdl->id_cdl) ?>     <?= esc($cdl->nome) ?></option>
                     <?php endforeach ?>
@@ -51,11 +51,11 @@
             <div class="row g-3 mb-3">
                 <label for="id_docente" class="form-label">Docente</label>
                 <select
-                    class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
-                    data-bs-theme="light" name="id_docente" required="" value="<?= set_value('id_docente') ?>">
-                        <option value="">
-                            Seleziona un docente
-                        </option>
+                        class="form-select dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px"
+                        data-bs-theme="light" name="id_docente" required="" value="<?= set_value('id_docente') ?>">
+                    <option value="">
+                        Seleziona un docente
+                    </option>
                     <?php foreach ($docenti as $docente): ?>
                         <option value="<?= esc($docente->id_docente) ?>"><?= esc($docente->nome) ?>     <?= esc($docente->cognome) ?></option>
                     <?php endforeach ?>
