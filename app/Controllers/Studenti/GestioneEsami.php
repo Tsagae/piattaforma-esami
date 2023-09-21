@@ -26,7 +26,7 @@ class GestioneEsami extends BaseController
         $items = [];
         foreach ($data['esami'] as $esame) {
             $item = new \stdClass();
-            $item->head = $esame->id_esame . " " . $esame->nome_insegnamento;
+            $item->head = $esame->nome_insegnamento;
             $item->body = ["$esame->data $esame->nome_docente $esame->cognome_docente"];
             $disabledBtn = $esame->propedeutici_mancanti != 0 ? " disabled" : "";
             $item->buttons = [
@@ -60,7 +60,7 @@ class GestioneEsami extends BaseController
         $items = [];
         foreach ($data['esami'] as $esame) {
             $item = new \stdClass();
-            $item->head = $esame->id_esame . " " . $esame->nome_insegnamento;
+            $item->head = $esame->nome_insegnamento;
             $item->body = ["$esame->data $esame->nome_docente $esame->cognome_docente"];
             $item->buttons = [];
             if ($esame->data > HelperData::getTodayDate()) {

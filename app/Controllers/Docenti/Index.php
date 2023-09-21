@@ -47,7 +47,7 @@ class Index extends BaseController
         $itemsInsegnamenti = [];
         foreach ($insegnamenti as $insegnamento) {
             $item = new \stdClass();
-            $item->head = $insegnamento->id_insegnamento . " " . $insegnamento->nome;
+            $item->head = $insegnamento->nome;
             $item->body = ["$insegnamento->semestre Semestre", "$insegnamento->id_cdl"];
             $item->buttons = [
                 (object) [
